@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-05-24T02:45:09.383379+00:00",
+  "timestamp": "2026-05-28T02:40:00.771396+00:00",
   "repo": "tireddy2/agentic-ai-ucreq2",
   "labels": [
     {
@@ -712,6 +712,22 @@
       "body": "Restructure Section 3 as \"Base Use Case and Common Requirements\"\nCould we place a basic \u201cuser(app client)-to-agent and agent\u2011to\u2011agent\u201d interaction as a foundational use case in Section 3, and then treat orchestrator agents, chained agents, coordinator agents, and mediator agents as derived use cases in Section 4? Agent\u2011to\u2011tool could also be placed in Section 3.\n\nThis would allow more common requirements to be merged. For example:\n\nA1\u20111 through A1\u20117 could become common requirements (A1\u20118 to A1\u201110 could stay as requirements for the agent\u2011to\u2011tool use case).\n\nB1\u20112 through B1\u20116 are also common requirements (B1\u20115 and A1\u20113 could be merged).\n\nB2\u20111, B2\u20112, B2\u20113 are also common requirements.\n\nIn the current structure, the number of truly common requirements feels relatively small, and many requirements appear to be use\u2011case\u2011specific.",
       "createdAt": "2026-05-21T12:11:12Z",
       "updatedAt": "2026-05-22T10:05:23Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 67,
+      "id": "I_kwDOSIVa8M8AAAABDZupfQ",
+      "title": "Replay protection requirement needs to be discussed",
+      "url": "https://github.com/tireddy2/agentic-ai-ucreq2/issues/67",
+      "state": "OPEN",
+      "author": "tireddy2",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "It is common for all the use cases. ",
+      "createdAt": "2026-05-26T09:59:23Z",
+      "updatedAt": "2026-05-26T09:59:23Z",
       "closedAt": null,
       "comments": []
     }
