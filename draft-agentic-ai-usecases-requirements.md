@@ -31,6 +31,10 @@ author:
     name: Kehan Yao
     organization: China Mobile
     email: yaokehan@chinamobile.com
+-
+    name: Parisa Foroughi
+    organization: Nokia
+    email: parisa.foroughi@nokia.com
 
 informative:
   A2A:
@@ -526,6 +530,407 @@ in [MCP] and the agent routing patterns discussed in [A2A].
 | B5-1  | The protocol is required to define error response types for request validation failure (rejected due to potential unintended or irreversible side effects) and protocol translation failure (rejected on unsuccessful translation of a request or response between supported protocols), distinct from authorization failure. | Transport, Security |
 | B5-2  | The protocol is required to support exchange of structured (audit) record for each action performed on behalf of a requesting agent, including the requesting agent's identity, the authorization credential presented, the action taken, and the outcome. | Security |
 
+
+## Dimensional Model of Use Cases {#dimensional-model}
+
+This section introduces a dimensional model for characterising the
+use cases of {{usecases}} along a small number of orthogonal,
+protocol-visible properties. The model is intended to make the
+use cases comparable on operational grounds, to surface the
+protocol primitives each value of each dimension implies, and to
+provide a framework in which extensions and deployment-context
+modifiers can be discussed without enlarging the base model
+itself.
+
+The model is offered as a tool for analysis and discussion. It is
+not normative. Where the analysis surfaces design choices that
+the present document does not explicitly resolve, those choices
+are recorded as open questions for further work rather than as
+findings.
+
+### The Protocol's Substrate {#substrate}
+
+The dimensions in this section are properties of agent-protocol
+exchanges. Their values are not all satisfied by the agent
+protocol itself: several are sourced from layers adjacent to it.
+Collectively these adjacent layers are referred to as the
+protocol's substrate, and include:
+
+* Transport: how bytes are moved, how connections persist, how
+  callee-initiated delivery is supported, and how reattachment
+  after interruption is handled.
+
+* Identity and authorization: how credentials are issued,
+  narrowed, carried across hops, and verified.
+
+* Discovery: how endpoints and their advertised capabilities are
+  located.
+
+* Audit: how actions taken on behalf of others are recorded for
+  accountability.
+
+* Security: how confidentiality, integrity, and group trust are
+  established for the exchange.
+
+The protocol agenda this section informs is therefore the
+specification of (a) the agent-protocol semantic surface (the
+dimensions and their values), (b) the substrates the protocol
+binds to in each facet, and (c) the integration points between
+the agent protocol and each substrate. Where existing standards
+provide the needed substrate behaviour in a given facet, the path
+forward is binding specification or profile, not protocol
+invention. Where they do not, the gap is named explicitly.
+
+### Dimensions {#dimensions}
+
+The model identifies seven dimensions. Each dimension is defined
+over a small value domain. A use case is described by selecting
+one value from each dimension, together with zero or more
+extensions ({{extensions}}) and an optional deployment-context
+modifier ({{cross-domain-modifier}}). Additional dimensions were considered
+and set aside; these are recorded in {{dimensions-not-adopted}} to mark the
+boundary of the adopted model.
+
+#### D1 Initiation Rights {#d1-initiation-rights}
+
+Which party is permitted to originate a message within an
+established association. Values:
+
+* caller-only: only the party that opened the association may
+  send requests.
+
+* callee-may-initiate: the callee may originate messages back to
+  the caller after the association is established, supporting
+  streamed events, push notifications, and pause-or-resume
+  signalling.
+
+All use cases in {{usecases}} require callee-may-initiate at minimum,
+because each use case involves responder-originated messages such
+as streamed intermediate results, agent-initiated notifications,
+authorization checkpoints, or audit emissions.
+
+#### D2 Output Cadence {#d2-output-cadence}
+
+The temporal shape of a task's output. Values:
+
+* atomic: a single request yields a single response.
+
+* streamed: a single request yields a sequence of partial outputs
+  over time.
+
+Use cases in {{usecases}} use streamed at the agent-to-agent
+interface; atomic is a degenerate case present at the substrate
+layer (for example, simple tool calls) but is not exercised as a
+use case in this document.
+
+#### D3 Lifecycle Control {#d3-lifecycle-control}
+
+Whether and how a task may pause or persist beyond a single
+connection. Values:
+
+* none: the task runs to completion within the originating
+  exchange without pause or reattachment.
+
+* suspend-resume: the task may pause awaiting an out-of-band
+  input (such as an authorization decision) and resume.
+
+* durable-reattach: the task survives transport interruption and
+  may be reattached using a persistent task identifier.
+
+{{authz-checkpoint}} motivates suspend-resume. {{cooperative-reasoning}} motivates
+durable-reattach when the protocol exposes a persistent task
+identifier; an alternative realisation maintains state at the
+application layer with repeated independent exchanges, in which
+case D3 is none and the multi-round structure is invisible at the
+protocol layer.
+
+#### D4 Authorization Derivation {#d4-authorization-derivation}
+
+The source of the authority under which an agent acts. Values:
+
+* direct: the agent acts under authority granted directly to it
+  by the request originator.
+
+* derived-1hop: the agent acts under authority derived from a
+  single prior authorization, with verifiable derivation and
+  scope narrowing.
+
+* derived-chain: the agent acts under authority derived through
+  two or more derivation steps, each cryptographically verifiable
+  and progressively narrowed back to the originator.
+
+* local-policy: the agent acts under its own standing authority
+  granted by its operator, applying local rules upon
+  authentication of the requester.
+
+{{simple-single-agent}} (A1-9) motivates derived-1hop for tool access.
+{{peer-collaborative}} (B3-1, B3-3, B3-4) motivates derived-chain.
+{{tool-mediation}}'s mediator may operate either as derived (preserving
+the originator's authorization chain to downstream systems) or as
+local-policy (terminating the chain at the mediator and presenting
+its own credentials downstream). The present document does not
+resolve this choice; it may benefit from explicit treatment in a
+future revision.
+
+#### D5 Endpoint Binding {#d5-endpoint-binding}
+
+How the calling party comes to know the addressable identifier of
+its counterpart. Values:
+
+* pre-bound: the endpoint is known to the caller before the
+  exchange begins, by configuration or out-of-band agreement.
+
+* registry-resolved: the caller queries a third-party registry
+  at runtime to obtain the endpoint and its advertised
+  capabilities.
+
+Most current use of agentic protocols proceeds pre-bound, with
+per-agent capability self-description published at a known
+endpoint (the well-known URI pattern). {{peer-collaborative}} (B3-5 through
+B3-8) is the use case most explicitly requiring registry-resolved
+binding. The mediator pattern of {{tool-mediation}} may itself absorb
+the discovery responsibility, performing registry-resolved
+dispatch on behalf of pre-bound callers.
+
+#### D6 State Locality {#d6-state-locality}
+
+Where the state required to continue a task across messages is
+maintained. Values:
+
+* caller-held: the caller carries the necessary context on each
+  message; the callee is stateless across messages.
+
+* callee-held: the callee maintains task state keyed by an
+  identifier; the caller references the state by that
+  identifier.
+
+The use cases in {{usecases}} implicitly assume callee-held, which
+combines naturally with D3 durable-reattach. A caller-held
+alternative is realised by REST-style and tool-call-oriented
+protocols and is not foreclosed by the present requirements;
+recording the choice avoids inadvertent foreclosure.
+
+#### D7 Result Addressability {#d7-result-addressability}
+
+How the output of a task is exposed. Values:
+
+* inline-only: the result is contained in the response.
+
+* referenceable-artifact: the result is produced as a named
+  artifact with an identifier; the artifact can be fetched,
+  shared with a third party, or referenced in subsequent calls,
+  and may outlive the producing task.
+
+The use cases in {{usecases}} are written assuming inline-only.
+Long-running consensus ({{cooperative-reasoning}}) and audit records ({{tool-mediation}})
+are natural candidates for referenceable-artifact semantics;
+the choice is left to subsequent work.
+
+### Mapping of Use Cases to Dimensions {#use-case-mapping}
+
+The following table summarises the dimensional value selected by
+each use case in {{usecases}}. Where a use case does not explicitly
+constrain a dimension, the inherited or implicit value is given
+in parentheses. Ambiguous entries are marked.
+
+| Use Case | D1 | D2 | D3 | D4 | D5 |
+|----------|----|----|----|----|-----|
+| {{simple-single-agent}} | C-I | str. | none | direct + derived-1hop (tool, A1-9) | pre-bound |
+| {{orchestrator-agent}} | C-I | str. | (none) | (local-policy) | pre-bound |
+| {{authz-checkpoint}} | C-I | str. | suspend-resume | (local-policy) | pre-bound |
+| {{peer-collaborative}} | C-I | str. | (none) | derived-chain | registry-resolved |
+| {{cooperative-reasoning}} | C-I | str. | durable-reattach | (direct or local-policy) | pre-bound |
+| {{tool-mediation}} | C-I | str. | (none) | ambiguous: derived-1hop or local-policy | pre-bound (mediator resolves downstream) |
+
+C-I = callee-may-initiate; str. = streamed
+
+All use cases use D6 callee-held implicitly. D7 is inline-only
+across all use cases as currently written.
+
+### Extensions {#extensions}
+
+An extension augments the baseline dimensional tuple of a use case
+with primitives the baseline does not require. Extensions are
+used when an additional behaviour does not warrant a new
+dimension value but does require a named protocol augmentation.
+
+The following extensions are identified from the use cases of
+{{usecases}}:
+
+* EXT-CHKPT: authorization checkpoint primitives (pause, resume,
+  timeout) supporting D3 suspend-resume. Motivated by {{authz-checkpoint}}.
+
+* EXT-REATTACH: persistent task identifier and reattachment
+  message supporting D3 durable-reattach. Motivated by {{cooperative-reasoning}}
+  when realised at the protocol layer.
+
+* EXT-CAPREG: capability registration and discovery messages,
+  with integrity protection of advertised capabilities,
+  supporting D5 registry-resolved. Motivated by {{peer-collaborative}}
+  (B3-5 through B3-8).
+
+* EXT-AUDIT: structured audit record exchange describing actions
+  taken on behalf of requesting parties. Motivated by {{tool-mediation}}
+  (B5-2).
+
+* EXT-XLATE: error vocabulary for protocol translation failure
+  and request validation failure, distinct from authorization
+  failure. Motivated by {{tool-mediation}} (B5-1).
+
+* EXT-MODNEG: modality negotiation at session setup, supporting
+  multimodal exchanges where the active modalities are agreed
+  between the client and the agent. Motivated by {{simple-single-agent}}
+  (A1-4, A1-5).
+
+### Deployment-Context Modifier: Cross-Domain Operation {#cross-domain-modifier}
+
+Cross-administrative-domain deployment is not modelled as a
+dimension. It is a property of how a use case is deployed and it
+tightens the practical value sets on existing dimensions:
+
+* D4: local-policy becomes insufficient where the receiver does
+  not recognise the caller's operator as authoritative for the
+  receiver's resources; direct or derived authorization is
+  required.
+
+* D5: pre-bound binding does not scale across organisations;
+  federated registry-resolved discovery becomes attractive.
+
+* D4 (chain depth): transitive delegation across organisations
+  places the strongest demands on credential chainability,
+  pointing to derived-chain.
+
+{{simple-single-agent}} (A1-7, tool access across domains) and {{peer-collaborative}}
+(B3-1 through B3-4, multi-hop delegation) are concentrated
+instances of this modifier. The substrate options for globally
+meaningful identity (verifiable identifier formats, federated
+identity providers, publicly anchored certificate chains) are a
+binding question rather than a dimensional value.
+
+### Recognisable Patterns {#recognizable-patterns}
+
+For orientation, several combinations of dimensional values
+correspond to patterns that readers may already recognise. The
+following are illustrative, not exhaustive:
+
+* Simple tool call: D1 caller-only, D2 atomic, D4 local-policy,
+  D5 pre-bound. Recognisable as a REST API call or a simple
+  tool invocation.
+
+* Tool-using agent: D1 callee-may-initiate, D2 streamed, D4
+  derived-1hop, D5 pre-bound. Recognisable as an LLM with
+  function calling or an agent invoking external tools.
+
+* Approval-gated job: D1 callee-may-initiate, D2 streamed, D3
+  suspend-resume, D4 local-policy, D5 pre-bound. Recognisable
+  as a continuous-integration pipeline awaiting manual approval.
+
+{{peer-collaborative}}'s protocol requirements correspond closely to the
+microservice-chain pattern applied to agents. {{authz-checkpoint}}'s
+correspond closely to the approval-gated job pattern.
+
+### Dimensions Considered but Not Adopted {#dimensions-not-adopted}
+
+During the construction of this model, additional candidate
+dimensions were considered and set aside. They are recorded here
+so that the boundaries of the adopted model are explicit and so
+that future revisions or companion documents can revisit them if
+new use cases motivate doing so. For each candidate, the
+dimension's intended purpose, candidate values, and the reason
+it did not enter the adopted set are noted briefly.
+
+* Communication cardinality. Intended to capture the number of
+  endpoints addressed in a single exchange. Candidate values:
+  one-to-one, one-to-many, many-to-many. In current agentic-
+  protocol practice, one-to-many is realised as repeated one-
+  to-one exchanges and does not introduce protocol-distinct
+  primitives. Many-to-many would require group identity,
+  dynamic membership, and replicated delivery semantics; no use
+  case in {{usecases}} unambiguously requires this today. A use
+  case requiring direct peer-mesh communication without a
+  coordinating party would reactivate the dimension.
+
+* Delegation transitivity. Intended to capture whether a
+  receiving agent may forward work and to what depth. Candidate
+  values: none, single-hop, transitive. The protocol-visible
+  distinction between these values lies in the structure of the
+  credential carried by the receiving agent, which is already
+  captured by Authorization Derivation (D4) through its
+  derived-1hop and derived-chain values. A separate dimension
+  would duplicate that delta without adding new information.
+
+* Mediation role. Intended to capture whether an interposed
+  entity is present and what protocol-relevant function it
+  performs. Candidate values: none, forwarding, translating,
+  validating. The distinguishing behaviours of a mediator
+  (cross-protocol translation, policy-based rejection) describe
+  what the mediator does on its two interfaces taken together
+  rather than a property of a single exchange. The
+  protocol-layer requirements of {{tool-mediation}} are captured by
+  extensions (EXT-AUDIT, EXT-XLATE) on the baseline.
+
+* Modality profile. Intended to capture the categories of data
+  format carried and whether the active set is negotiated.
+  Candidate values: single, negotiated-multi. Only the
+  negotiated-multi value is exercised by {{usecases}}, and the
+  negotiation primitive itself is captured as an extension
+  (EXT-MODNEG). A future use case requiring real-time
+  multimodal interaction (for example, voice or video among
+  agents) would likely motivate a transport-quality-of-service
+  dimension rather than reactivating modality as defined here.
+
+* Failure and delivery semantics. Intended to capture whether
+  the agent protocol exposes a delivery guarantee. Candidate
+  values: at-most-once, at-least-once, idempotent-keyed. In
+  current practice the agent layer is uniformly at-most-once
+  and stronger guarantees, where needed, are provided by the
+  substrate to which the agent protocol is bound. A use case
+  requiring exactly-once-effect (for example, transactional or
+  financial agent operations) would reactivate this dimension.
+
+* Trust domain span. Intended to capture whether an exchange
+  is contained within one administrative domain or crosses
+  administrative boundaries. Candidate values: intra-domain,
+  cross-domain. Cross-domain operation does not introduce new
+  exchange-level primitives; it tightens the practical value
+  sets on Authorization Derivation (D4) and Endpoint Binding
+  (D5). It is therefore captured by the deployment-context
+  modifier of {{cross-domain-modifier}} rather than as an independent
+  dimension.
+
+### Open Questions for Further Work {#open-questions}
+
+The dimensional model surfaces a small number of design choices
+that the present document does not resolve and that may be useful
+to address in a future revision or in companion documents:
+
+* The mediator pattern of {{tool-mediation}} admits two distinct
+  behaviours on D4: preserving the originator's authorization
+  chain to downstream systems, or terminating the chain at the
+  mediator. Each has different audit and trust implications.
+
+* {{cooperative-reasoning}}'s communication topology determines whether D3 is
+  durable-reattach (with a persistent task identifier) or none
+  (with application-layer iteration over independent exchanges).
+  The protocol implications differ materially.
+
+* Several extensions identified in {{extensions}} may be candidates
+  for cross-use-case standardisation rather than per-use-case
+  treatment. The boundary between baseline and extension is a
+  matter for community discussion.
+
+* The substrate facets enumerated in {{substrate}} each admit
+  multiple existing binding candidates. Specifying which
+  bindings are profiled by this work, and which are left to
+  implementation, will shape the scope of subsequent
+  standardisation.
+
+* Several candidate dimensions enumerated in {{dimensions-not-adopted}} are
+  conditional on use cases that the present document does not
+  describe. Operators or implementers with deployments that
+  exercise those candidates are encouraged to surface them so
+  that the model and the use case set can evolve together.
+  
 # Security Considerations {#security}
 
 Security considerations are addressed throughout this document via
