@@ -221,64 +221,66 @@ Table of Contents
    *  *Authentication*: Requirements related to identity verification
       and credential delegation.
 
-   +========+========================================+================+
-   | REQ-ID | Description                            | Tag            |
-   +========+========================================+================+
-   | CMN-1  | The protocol is required to support    | Discovery,     |
-   |        | any client application to communicate  | Authentication |
-   |        | with any agent service.                |                |
-   +--------+----------------------------------------+----------------+
-   | CMN-2  | Mutual authentication is required      | Authentication |
-   |        | between all communicating parties.     |                |
-   +--------+----------------------------------------+----------------+
-   | CMN-3  | All protocol traffic is required to be | Security       |
-   |        | encrypted and integrity-protected in   |                |
-   |        | transit.                               |                |
-   +--------+----------------------------------------+----------------+
-   | CMN-4  | Structured error responses are         | Security       |
-   |        | required to include an authorization   |                |
-   |        | scope violation type, reported by the  |                |
-   |        | orchestrator or mediator when an agent |                |
-   |        | attempts an action that exceeds or     |                |
-   |        | contradicts the scope delegated to it. |                |
-   +--------+----------------------------------------+----------------+
-   | CMN-5  | Structured error responses are         | Transport      |
-   |        | required, distinguishing at minimum:   |                |
-   |        | authentication failure, authorization  |                |
-   |        | failure, timeout, and internal error.  |                |
-   +--------+----------------------------------------+----------------+
-   | CMN-6  | The protocol is required to provide a  | Transport      |
-   |        | means to signal task priority so that  |                |
-   |        | critical-path tasks can be scheduled   |                |
-   |        | ahead of lower-priority ones.          |                |
-   +--------+----------------------------------------+----------------+
-   | CMN-7  | The protocol is required to support    | Security,      |
-   |        | cryptographic algorithm agility,       | Authentication |
-   |        | ensuring that cryptographic algorithms |                |
-   |        | used for encryption, authentication,   |                |
-   |        | credential verification, and integrity |                |
-   |        | protection can be negotiated and       |                |
-   |        | updated over time, in accordance with  |                |
-   |        | [RFC7696].                             |                |
-   +--------+----------------------------------------+----------------+
-   | CMN-8  | The protocol is required to provide a  | Authentication |
-   |        | means to verify the agent              |                |
-   |        | authentication credentials validity    |                |
-   |        | used by agents at the time of use.     |                |
-   +--------+----------------------------------------+----------------+
-   | CMN-9  | The protocol is required to support    | Security       |
-   |        | signaling credential revocation and    |                |
-   |        | invalid credential outcomes.           |                |
-   +--------+----------------------------------------+----------------+
-   | CMN-10 | The protocol is required to provide    | Transport      |
-   |        | reliable, in-order delivery of         |                |
-   |        | messages within a session, and to      |                |
-   |        | signal to communicating parties when   |                |
-   |        | reliable delivery cannot be            |                |
-   |        | maintained.                            |                |
-   +--------+----------------------------------------+----------------+
+    +============+===================================+================+
+    | REQ-ID     | Description                       | Tag            |
+    +============+===================================+================+
+    | CMN-1      | The protocol is required to       | Discovery,     |
+    |            | support any client application to | Authentication |
+    |            | communicate with any agent        |                |
+    |            | service.                          |                |
+    +------------+-----------------------------------+----------------+
+    | CMN-2      | Mutual authentication is required | Authentication |
+    |            | between all communicating         |                |
+    |            | parties.                          |                |
+    +------------+-----------------------------------+----------------+
+    | CMN-3      | All protocol traffic is required  | Security       |
+    |            | to be encrypted and integrity-    |                |
+    |            | protected in transit.             |                |
+    +------------+-----------------------------------+----------------+
+    | CMN-4      | Structured error responses are    | Security       |
+    |            | required to include an            |                |
+    |            | authorization scope violation     |                |
+    |            | type, reported by the             |                |
+    |            | orchestrator or mediator when an  |                |
+    |            | agent attempts an action that     |                |
+    |            | exceeds or contradicts the scope  |                |
+    |            | delegated to it.                  |                |
+    +------------+-----------------------------------+----------------+
+    | CMN-5      | Structured error responses are    | Transport      |
+    |            | required, distinguishing at       |                |
+    |            | minimum: authentication failure,  |                |
+    |            | authorization failure, timeout,   |                |
+    |            | and internal error.               |                |
+    +------------+-----------------------------------+----------------+
+    | CMN-6      | The protocol is required to       | Transport      |
+    |            | provide a means to signal task    |                |
+    |            | priority so that critical-path    |                |
+    |            | tasks can be scheduled ahead of   |                |
+    |            | lower-priority ones.              |                |
+    +------------+-----------------------------------+----------------+
+    | CMN-7      | The protocol is required to       | Security,      |
+    |            | support cryptographic algorithm   | Authentication |
+    |            | agility, ensuring that            |                |
+    |            | cryptographic algorithms used for |                |
+    |            | encryption, authentication,       |                |
+    |            | credential verification, and      |                |
+    |            | integrity protection can be       |                |
+    |            | negotiated and updated over time, |                |
+    |            | in accordance with [RFC7696].     |                |
+    +------------+-----------------------------------+----------------+
+    | CMN-8      | The protocol is required to       | Authentication |
+    |            | provide a means to verify the     |                |
+    |            | agent authentication credentials  |                |
+    |            | validity used by agents at the    |                |
+    |            | time of use.                      |                |
+    +------------+-----------------------------------+----------------+
+    | CMN-9      | The protocol is required to       | Security       |
+    | [*CHANGE*] | support signaling that a          |                |
+    |            | presented credential has been     |                |
+    |            | revoked or is otherwise invalid.  |                |
+    +------------+-----------------------------------+----------------+
 
-                                 Table 1
+                                  Table 1
 
 3.1.  Network-Layer Assumptions
 
@@ -574,6 +576,10 @@ Table of Contents
 
                                   Table 4
 
+   [*CHANGE*] Fine-grained, per-operation authorization for sensitive
+   actions is an authorization-layer function and is out of scope for
+   this document; it relies on ongoing work in the OAuth Working Group.
+
 4.4.  Peer Collaborative Multi-Agent Problem Solving
 
 4.4.1.  Description
@@ -616,95 +622,88 @@ Table of Contents
    introduces additional requirements specific to multi-hop delegation
    chains.
 
-   +============+===================================+=================+
-   | REQ-ID     | Description                       | Tag             |
-   +============+===================================+=================+
-   | B3-1       | The protocol is required to       | Authentication, |
-   |            | support multi-hop delegation      | Security        |
-   |            | chains, where an agent that       |                 |
-   |            | receives a delegated subtask may  |                 |
-   |            | itself delegate further to other  |                 |
-   |            | agents.  At each hop, the         |                 |
-   |            | delegating agent is required to   |                 |
-   |            | present a credential that does    |                 |
-   |            | not exceed the authorization      |                 |
-   |            | scope of the credential it        |                 |
-   |            | received.                         |                 |
-   +------------+-----------------------------------+-----------------+
-   | B3-2       | The protocol is required to       | Authentication, |
-   |            | preserve the identity of the      | Security        |
-   |            | originating entity across all     |                 |
-   |            | hops in the delegation chain,     |                 |
-   |            | such that any agent in the chain  |                 |
-   |            | can determine the identity of the |                 |
-   |            | entity that originally authorized |                 |
-   |            | the task.                         |                 |
-   +------------+-----------------------------------+-----------------+
-   | B3-3       | The protocol is required to       | Authentication, |
-   |            | support transferable credentials  | Security        |
-   |            | that carry the original           |                 |
-   |            | authorization constraints across  |                 |
-   |            | all hops in the delegation chain. |                 |
-   |            | Each receiving agent is required  |                 |
-   |            | to be able to cryptographically   |                 |
-   |            | verify that the credential        |                 |
-   |            | presented to it was issued by the |                 |
-   |            | delegating agent and that the     |                 |
-   |            | chain of delegation traces back   |                 |
-   |            | to the original authorization.    |                 |
-   +------------+-----------------------------------+-----------------+
-   | B3-4       | The protocol is required to       | Authentication, |
-   |            | ensure that authorization granted | Security        |
-   |            | to an agent in a delegation       |                 |
-   |            | chain, including for tool         |                 |
-   |            | invocations, is derived from the  |                 |
-   |            | authorization issued by the       |                 |
-   |            | initiating agent, and not from    |                 |
-   |            | the identity or authorization     |                 |
-   |            | scope of any intermediate agent   |                 |
-   |            | in the chain.                     |                 |
-   +------------+-----------------------------------+-----------------+
-   | B3-5       | The protocol is required to       | Registration,   |
-   |            | define a capability registration  | Discovery       |
-   |            | mechanism by which agents can     |                 |
-   |            | publish metadata describing their |                 |
-   |            | capabilities, supported           |                 |
-   |            | protocols, rate limits,           |                 |
-   |            | authentication methods,           |                 |
-   |            | authorization mechanisms, and     |                 |
-   |            | authorization scopes to a         |                 |
-   |            | discovery service or registry.    |                 |
-   +------------+-----------------------------------+-----------------+
-   | B3-6       | The protocol is required to       | Discovery       |
-   |            | define a capability discovery     |                 |
-   |            | mechanism by which agents can     |                 |
-   |            | query a discovery service or      |                 |
-   |            | registry to discover and select   |                 |
-   |            | appropriate peer agents at        |                 |
-   |            | runtime without requiring prior   |                 |
-   |            | peer-specific configuration.      |                 |
-   +------------+-----------------------------------+-----------------+
-   | B3-7       | The protocol is required to       | Discovery       |
-   |            | define an agent identifier format |                 |
-   |            | that uniquely represents an agent |                 |
-   |            | identity and is resolvable to the |                 |
-   |            | agent's communication endpoint    |                 |
-   |            | using an appropriate discovery    |                 |
-   |            | mechanism.                        |                 |
-   +------------+-----------------------------------+-----------------+
-   | B3-8       | The protocol is required to       | Discovery,      |
-   |            | ensure that advertised            | Security        |
-   |            | capabilities are integrity-       |                 |
-   |            | protected, such that a            |                 |
-   |            | discovering agent can verify they |                 |
-   |            | have not been tampered with.      |                 |
-   +------------+-----------------------------------+-----------------+
-   | B3-9       | The protocol is required to allow | Transport       |
-   | [*CHANGE*] | a delegating agent to detect that |                 |
-   |            | a delegated agent has become      |                 |
-   |            | unavailable and to halt the       |                 |
-   |            | affected in-flight subtask.       |                 |
-   +------------+-----------------------------------+-----------------+
+    +========+=====================================+=================+
+    | REQ-ID | Description                         | Tag             |
+    +========+=====================================+=================+
+    | B3-1   | The protocol is required to support | Authentication, |
+    |        | multi-hop delegation chains, where  | Security        |
+    |        | an agent that receives a delegated  |                 |
+    |        | subtask may itself delegate further |                 |
+    |        | to other agents.  At each hop, the  |                 |
+    |        | delegating agent is required to     |                 |
+    |        | present a credential that does not  |                 |
+    |        | exceed the authorization scope of   |                 |
+    |        | the credential it received.         |                 |
+    +--------+-------------------------------------+-----------------+
+    | B3-2   | The protocol is required to         | Authentication, |
+    |        | preserve the identity of the        | Security        |
+    |        | originating entity across all hops  |                 |
+    |        | in the delegation chain, such that  |                 |
+    |        | any agent in the chain can          |                 |
+    |        | determine the identity of the       |                 |
+    |        | entity that originally authorized   |                 |
+    |        | the task.                           |                 |
+    +--------+-------------------------------------+-----------------+
+    | B3-3   | The protocol is required to support | Authentication, |
+    |        | transferable credentials that carry | Security        |
+    |        | the original authorization          |                 |
+    |        | constraints across all hops in the  |                 |
+    |        | delegation chain.  Each receiving   |                 |
+    |        | agent is required to be able to     |                 |
+    |        | cryptographically verify that the   |                 |
+    |        | credential presented to it was      |                 |
+    |        | issued by the delegating agent and  |                 |
+    |        | that the chain of delegation traces |                 |
+    |        | back to the original authorization. |                 |
+    +--------+-------------------------------------+-----------------+
+    | B3-4   | The protocol is required to ensure  | Authentication, |
+    |        | that authorization granted to an    | Security        |
+    |        | agent in a delegation chain,        |                 |
+    |        | including for tool invocations, is  |                 |
+    |        | derived from the authorization      |                 |
+    |        | issued by the initiating agent, and |                 |
+    |        | not from the identity or            |                 |
+    |        | authorization scope of any          |                 |
+    |        | intermediate agent in the chain.    |                 |
+    +--------+-------------------------------------+-----------------+
+    | B3-5   | The protocol is required to define  | Registration,   |
+    |        | a capability registration mechanism | Discovery       |
+    |        | by which agents can publish         |                 |
+    |        | metadata describing their           |                 |
+    |        | capabilities, supported protocols,  |                 |
+    |        | rate limits, authentication         |                 |
+    |        | methods, authorization mechanisms,  |                 |
+    |        | and authorization scopes to a       |                 |
+    |        | discovery service or registry.      |                 |
+    +--------+-------------------------------------+-----------------+
+    | B3-6   | The protocol is required to define  | Discovery       |
+    |        | a capability discovery mechanism by |                 |
+    |        | which agents can query a discovery  |                 |
+    |        | service or registry to discover and |                 |
+    |        | select appropriate peer agents at   |                 |
+    |        | runtime without requiring prior     |                 |
+    |        | peer-specific configuration.        |                 |
+    +--------+-------------------------------------+-----------------+
+    | B3-7   | The protocol is required to define  | Discovery       |
+    |        | an agent identifier format that     |                 |
+    |        | uniquely represents an agent        |                 |
+    |        | identity and is resolvable to the   |                 |
+    |        | agent's communication endpoint      |                 |
+    |        | using an appropriate discovery      |                 |
+    |        | mechanism.                          |                 |
+    +--------+-------------------------------------+-----------------+
+    | B3-8   | The protocol is required to ensure  | Discovery,      |
+    |        | that advertised capabilities are    | Security        |
+    |        | integrity-protected, such that a    |                 |
+    |        | discovering agent can verify they   |                 |
+    |        | have not been tampered with.        |                 |
+    +--------+-------------------------------------+-----------------+
+    | B3-9   | The protocol is required to allow a | Transport       |
+    |        | delegating agent to detect that a   |                 |
+    |        | delegated agent has become          |                 |
+    |        | unavailable and to halt the         |                 |
+    |        | affected in-flight subtask.         |                 |
+    +--------+-------------------------------------+-----------------+
 
                                  Table 5
 
@@ -870,15 +869,13 @@ Table of Contents
    accountability, and traceability need to be considered in the design
    of agent identity mechanisms.
 
-   [*CHANGE*] Detecting that a delegated agent has become unavailable
-   (B3-9) allows the affected subtask to be halted, but does not by
-   itself imply that the agent's authorization should be revoked.
-   Unavailability may indicate a transient failure rather than
-   compromise.  Where a delegated agent is suspected of being
-   compromised, revocation of its authorization is a function of the
-   authorization layer and is out of scope for this document; revocation
-   across delegation chains is under active discussion in the OAuth
-   Working Group.
+   The protocol signals when a credential has been revoked or is
+   otherwise invalid (CMN-9) so peers stop honouring it, but revoking
+   authorization is an authorization-layer function, out of scope here;
+   revocation across delegation chains is under discussion in the OAuth
+   Working Group.  Agent unavailability (B3-9) halts the affected
+   subtask but does not imply revocation, since it may be a transient
+   failure rather than compromise.
 
 6.  IANA Considerations
 

@@ -1438,14 +1438,9 @@ AI agent by submitting a request or task.<a href="#section-2-19" class="pilcrow"
             <td class="text-left" rowspan="1" colspan="1">Authentication</td>
           </tr>
           <tr>
-            <td class="text-left" rowspan="1" colspan="1">CMN-9</td>
-            <td class="text-left" rowspan="1" colspan="1">The protocol is required to support signaling credential revocation and invalid credential outcomes.</td>
+            <td class="text-left" rowspan="1" colspan="1">CMN-9 [<strong>CHANGE</strong>]</td>
+            <td class="text-left" rowspan="1" colspan="1">The protocol is required to support signaling that a presented credential has been revoked or is otherwise invalid.</td>
             <td class="text-left" rowspan="1" colspan="1">Security</td>
-          </tr>
-          <tr>
-            <td class="text-left" rowspan="1" colspan="1">CMN-10</td>
-            <td class="text-left" rowspan="1" colspan="1">The protocol is required to provide reliable, in-order delivery of messages within a session, and to signal to communicating parties when reliable delivery cannot be maintained.</td>
-            <td class="text-left" rowspan="1" colspan="1">Transport</td>
           </tr>
         </tbody>
       </table>
@@ -1769,6 +1764,10 @@ and introduces additional requirements specific to authorization checkpoints in 
               </tr>
             </tbody>
           </table>
+<p id="section-4.3.3-3">[<strong>CHANGE</strong>]
+Fine-grained, per-operation authorization for sensitive actions is an
+authorization-layer function and is out of scope for this document; it relies
+on ongoing work in the OAuth Working Group.<a href="#section-4.3.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1880,7 +1879,7 @@ and introduces additional requirements specific to multi-hop delegation chains.<
                 <td class="text-left" rowspan="1" colspan="1">Discovery, Security</td>
               </tr>
               <tr>
-                <td class="text-left" rowspan="1" colspan="1">B3-9 [<strong>CHANGE</strong>]</td>
+                <td class="text-left" rowspan="1" colspan="1">B3-9</td>
                 <td class="text-left" rowspan="1" colspan="1">The protocol is required to allow a delegating agent to detect that a delegated agent has become unavailable and to halt the affected in-flight subtask.</td>
                 <td class="text-left" rowspan="1" colspan="1">Transport</td>
               </tr>
@@ -2099,13 +2098,12 @@ pseudonymous or temporary identifiers to reduce linkability,
 while preserving the ability to audit and enforce accountability
 where required. The trade-offs between privacy, accountability,
 and traceability need to be considered in the design of agent identity mechanisms.<a href="#section-5-2" class="pilcrow">¶</a></p>
-<p id="section-5-3">[<strong>CHANGE</strong>] Detecting that a delegated agent has become unavailable (B3-9)
-allows the affected subtask to be halted, but does not by itself imply that the
-agent's authorization should be revoked. Unavailability may indicate a transient
-failure rather than compromise. Where a delegated agent is suspected of being
-compromised, revocation of its authorization is a function of the authorization
-layer and is out of scope for this document; revocation across delegation chains
-is under active discussion in the OAuth Working Group.<a href="#section-5-3" class="pilcrow">¶</a></p>
+<p id="section-5-3">The protocol signals when a credential has been revoked or is otherwise invalid
+(CMN-9) so peers stop honouring it, but revoking authorization is an
+authorization-layer function, out of scope here; revocation across delegation
+chains is under discussion in the OAuth Working Group. Agent unavailability
+(B3-9) halts the affected subtask but does not imply revocation, since it may
+be a transient failure rather than compromise.<a href="#section-5-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana">
