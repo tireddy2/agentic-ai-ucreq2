@@ -221,66 +221,58 @@ Table of Contents
    *  *Authentication*: Requirements related to identity verification
       and credential delegation.
 
-    +============+===================================+================+
-    | REQ-ID     | Description                       | Tag            |
-    +============+===================================+================+
-    | CMN-1      | The protocol is required to       | Discovery,     |
-    |            | support any client application to | Authentication |
-    |            | communicate with any agent        |                |
-    |            | service.                          |                |
-    +------------+-----------------------------------+----------------+
-    | CMN-2      | Mutual authentication is required | Authentication |
-    |            | between all communicating         |                |
-    |            | parties.                          |                |
-    +------------+-----------------------------------+----------------+
-    | CMN-3      | All protocol traffic is required  | Security       |
-    |            | to be encrypted and integrity-    |                |
-    |            | protected in transit.             |                |
-    +------------+-----------------------------------+----------------+
-    | CMN-4      | Structured error responses are    | Security       |
-    |            | required to include an            |                |
-    |            | authorization scope violation     |                |
-    |            | type, reported by the             |                |
-    |            | orchestrator or mediator when an  |                |
-    |            | agent attempts an action that     |                |
-    |            | exceeds or contradicts the scope  |                |
-    |            | delegated to it.                  |                |
-    +------------+-----------------------------------+----------------+
-    | CMN-5      | Structured error responses are    | Transport      |
-    |            | required, distinguishing at       |                |
-    |            | minimum: authentication failure,  |                |
-    |            | authorization failure, timeout,   |                |
-    |            | and internal error.               |                |
-    +------------+-----------------------------------+----------------+
-    | CMN-6      | The protocol is required to       | Transport      |
-    |            | provide a means to signal task    |                |
-    |            | priority so that critical-path    |                |
-    |            | tasks can be scheduled ahead of   |                |
-    |            | lower-priority ones.              |                |
-    +------------+-----------------------------------+----------------+
-    | CMN-7      | The protocol is required to       | Security,      |
-    |            | support cryptographic algorithm   | Authentication |
-    |            | agility, ensuring that            |                |
-    |            | cryptographic algorithms used for |                |
-    |            | encryption, authentication,       |                |
-    |            | credential verification, and      |                |
-    |            | integrity protection can be       |                |
-    |            | negotiated and updated over time, |                |
-    |            | in accordance with [RFC7696].     |                |
-    +------------+-----------------------------------+----------------+
-    | CMN-8      | The protocol is required to       | Authentication |
-    |            | provide a means to verify the     |                |
-    |            | agent authentication credentials  |                |
-    |            | validity used by agents at the    |                |
-    |            | time of use.                      |                |
-    +------------+-----------------------------------+----------------+
-    | CMN-9      | The protocol is required to       | Security       |
-    | [*CHANGE*] | support signaling that a          |                |
-    |            | presented credential has been     |                |
-    |            | revoked or is otherwise invalid.  |                |
-    +------------+-----------------------------------+----------------+
+   +========+========================================+================+
+   | REQ-ID | Description                            | Tag            |
+   +========+========================================+================+
+   | CMN-1  | The protocol is required to support    | Discovery,     |
+   |        | any client application to communicate  | Authentication |
+   |        | with any agent service.                |                |
+   +--------+----------------------------------------+----------------+
+   | CMN-2  | Mutual authentication is required      | Authentication |
+   |        | between all communicating parties.     |                |
+   +--------+----------------------------------------+----------------+
+   | CMN-3  | All protocol traffic is required to be | Security       |
+   |        | encrypted and integrity-protected in   |                |
+   |        | transit.                               |                |
+   +--------+----------------------------------------+----------------+
+   | CMN-4  | Structured error responses are         | Security       |
+   |        | required to include an authorization   |                |
+   |        | scope violation type, reported by the  |                |
+   |        | orchestrator or mediator when an agent |                |
+   |        | attempts an action that exceeds or     |                |
+   |        | contradicts the scope delegated to it. |                |
+   +--------+----------------------------------------+----------------+
+   | CMN-5  | Structured error responses are         | Transport      |
+   |        | required, distinguishing at minimum:   |                |
+   |        | authentication failure, authorization  |                |
+   |        | failure, timeout, and internal error.  |                |
+   +--------+----------------------------------------+----------------+
+   | CMN-6  | The protocol is required to provide a  | Transport      |
+   |        | means to signal task priority so that  |                |
+   |        | critical-path tasks can be scheduled   |                |
+   |        | ahead of lower-priority ones.          |                |
+   +--------+----------------------------------------+----------------+
+   | CMN-7  | The protocol is required to support    | Security,      |
+   |        | cryptographic algorithm agility,       | Authentication |
+   |        | ensuring that cryptographic algorithms |                |
+   |        | used for encryption, authentication,   |                |
+   |        | credential verification, and integrity |                |
+   |        | protection can be negotiated and       |                |
+   |        | updated over time, in accordance with  |                |
+   |        | [RFC7696].                             |                |
+   +--------+----------------------------------------+----------------+
+   | CMN-8  | The protocol is required to provide a  | Authentication |
+   |        | means to verify the agent              |                |
+   |        | authentication credentials validity    |                |
+   |        | used by agents at the time of use.     |                |
+   +--------+----------------------------------------+----------------+
+   | CMN-9  | The protocol is required to support    | Security       |
+   |        | signaling that a presented credential  |                |
+   |        | has been revoked or is otherwise       |                |
+   |        | invalid.                               |                |
+   +--------+----------------------------------------+----------------+
 
-                                  Table 1
+                                 Table 1
 
 3.1.  Network-Layer Assumptions
 
@@ -576,9 +568,9 @@ Table of Contents
 
                                   Table 4
 
-   [*CHANGE*] Fine-grained, per-operation authorization for sensitive
-   actions is an authorization-layer function and is out of scope for
-   this document; it relies on ongoing work in the OAuth Working Group.
+   Fine-grained, per-operation authorization for sensitive actions is an
+   authorization-layer function and is out of scope for this document;
+   it relies on ongoing work in the OAuth Working Group.
 
 4.4.  Peer Collaborative Multi-Agent Problem Solving
 
