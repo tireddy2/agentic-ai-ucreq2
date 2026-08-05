@@ -208,7 +208,11 @@ Each per-use-case requirement is tagged with one or more of the following protoc
 | CMN-6  | The protocol is required to provide a means to signal task priority so that critical-path tasks can be scheduled ahead of lower-priority ones. | Transport |
 | CMN-7  | The protocol is required to support cryptographic algorithm agility, ensuring that cryptographic algorithms used for encryption, authentication, credential verification, and integrity protection can be negotiated and updated over time, in accordance with {{RFC7696}}. | Security, Authentication |
 | CMN-8  | The protocol is required to provide a means to verify the agent authentication credentials validity used by agents at the time of use. | Authentication |
-| CMN-9  | The protocol is required to support signaling credential revocation and invalid credential outcomes. | Security |
+| CMN-9 | The protocol is required to support signaling that a presented credential has been revoked or is otherwise invalid. | Security |
+
+## Network-Layer Assumptions {#network-assumptions}
+
+The requirements in this document assume an underlying transport that provides reliable, ordered, and congestion-controlled delivery.
 
 # Use Cases {#usecases}
 
@@ -249,17 +253,23 @@ This interaction pattern is described in [ROSENBERG] and [SCRM].
 
 ### Protocol Requirements {#a1-protocol-requirements}
 
-| REQ-ID | Description | Tag |
-|--------|-------------|-----|
-| A1-1  | The protocol is required to support incremental streaming of agent output, allowing partial results to be delivered to the client before the agent has completed processing. | Transport |
-| A1-2  | The protocol is required to define a task cancellation message that the client can issue at any point during task execution. | Transport |
-| A1-3  | The protocol is required to define structured error message types that distinguish at minimum: transport failure, tool invocation failure, and agent processing failure. | Transport |
-| A1-4  | The protocol is required to support multiple modalities for both input and output. | Transport |
-| A1-5  | The protocol is required to support modality negotiation at session setup, allowing the client and agent to agree on which modalities are active for the session. | Discovery, Transport |
-| A1-6  | The protocol is required to support agent-initiated notifications to the client during task execution. | Transport |
-| A1-7  | The protocol is required to support concurrent invocation of multiple tools within a single agent task, where tools may be operated by distinct providers across different administrative domains, each with independent authentication and authorization requirements. | Discovery, Transport, Security |
-| A1-8  | The protocol is required to support bulk transfer of large data between communicating parties, applicable to both agent-to-tool and agent-to-agent interactions. | Transport |
-| A1-9 | A delegation mechanism is required to be defined by which an agent presents to a tool provider a credential attesting the authorization for the requested tool access, without exposing the client's primary credentials. | Authentication |
+This use case involves two distinct protocol interfaces: the
+App/Agent-to-Agent interface (between the client application and the agent)
+and the Agent-to-Tool interface (between the agent and the tools it invokes).
+A given requirement does not necessarily apply to both. The Interaction column
+indicates the interface each requirement applies to.
+
+| REQ-ID | Description | Interaction | Tag |
+|--------|-------------|-------------|-----|
+| A1-1  | The protocol is required to support incremental streaming of agent output, allowing partial results to be delivered to the client before the agent has completed processing. | App/Agent-to-Agent | Transport |
+| A1-2  | The protocol is required to define a task cancellation message that the client can issue at any point during task execution. | App/Agent-to-Agent | Transport |
+| A1-3  | The protocol is required to define structured error message types that distinguish at minimum: transport failure, tool invocation failure, and agent processing failure. | Both | Transport |
+| A1-4  | The protocol is required to support multiple modalities for both input and output. | App/Agent-to-Agent | Transport |
+| A1-5  | The protocol is required to support modality negotiation at session setup, allowing the client and agent to agree on which modalities are active for the session. | App/Agent-to-Agent | Discovery, Transport |
+| A1-6  | The protocol is required to support agent-initiated notifications to the client during task execution. | App/Agent-to-Agent | Transport |
+| A1-7  | The protocol is required to support concurrent invocation of multiple tools within a single agent task, where tools may be operated by distinct providers across different administrative domains, each with independent authentication and authorization requirements. | Agent-to-Tool | Discovery, Transport, Security |
+| A1-8  | The protocol is required to support bulk transfer of large data between communicating parties, applicable to both agent-to-tool and agent-to-agent interactions. | Both | Transport |
+| A1-9 | A delegation mechanism is required to be defined by which an agent presents to a tool provider a credential attesting the authorization for the requested tool access, without exposing the client's primary credentials. | Agent-to-Tool | Authentication |
 
 ## Orchestrator and Agent Collaboration {#orchestrator-agent}
 
@@ -349,6 +359,10 @@ and introduces additional requirements specific to authorization checkpoints in 
 | B2-3  | The protocol is required to define the valid responses to an authorization checkpoint, including at minimum: approve, deny, and approve with modified parameters. A denial is required to be conveyed as an explicit error response. |  Transport, Security |
 | B2-4  | The protocol is required to support a response timeout, after which the agent treats the request as unresolved and halts the affected subtask. |  Transport |
 
+Fine-grained, per-operation authorization for sensitive actions is an
+authorization-layer function and is out of scope for this document; it relies
+on ongoing work in the OAuth Working Group.
+
 ## Peer Collaborative Multi-Agent Problem Solving {#peer-collaborative}
 
 ### Description
@@ -402,6 +416,7 @@ and introduces additional requirements specific to multi-hop delegation chains.
 | B3-6  | The protocol is required to define a capability discovery mechanism by which agents can query a discovery service or registry to discover and select appropriate peer agents at runtime without requiring prior peer-specific configuration. | Discovery |
 | B3-7  | The protocol is required to define an agent identifier format that uniquely represents an agent identity and is resolvable to the agent's communication endpoint using an appropriate discovery mechanism. | Discovery |
 | B3-8  | The protocol is required to ensure that advertised capabilities are integrity-protected, such that a discovering agent can verify they have not been tampered with. | Discovery, Security |
+| B3-9 | The protocol is required to allow a delegating agent to detect that a delegated agent has become unavailable and to halt the affected in-flight subtask. | Transport |
 
 ## Cooperative Reasoning and Consensus Formation {#cooperative-reasoning}
 
@@ -542,6 +557,11 @@ while preserving the ability to audit and enforce accountability
 where required. The trade-offs between privacy, accountability,
 and traceability need to be considered in the design of agent identity mechanisms.
 
+Revoking authorization is an authorization-layer function, out of scope here;
+revocation across delegation chains is under discussion in the OAuth Working Group.
+Agent unavailability (B3-9) halts the affected subtask but does not imply revocation,
+since it may be a transient failure rather than compromise.
+
 # IANA Considerations {#iana}
 
 This document has no IANA actions.
@@ -549,4 +569,4 @@ This document has no IANA actions.
 # Acknowledgements
 {:numbered="false"}
 
-Thanks to Borislava Gajic, Julien Maisonneuve, Parisa Foroughi, Laurent Ciavaglia, Peter Leis and Sina Khatibi for the discussions and comments.
+Thanks to Borislava Gajic, Julien Maisonneuve, Parisa Foroughi, Laurent Ciavaglia, Nathalie Romo Moreno, Peter Leis and Sina Khatibi for the discussions and comments.
