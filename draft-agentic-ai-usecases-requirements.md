@@ -557,12 +557,10 @@ while preserving the ability to audit and enforce accountability
 where required. The trade-offs between privacy, accountability,
 and traceability need to be considered in the design of agent identity mechanisms.
 
-The protocol signals when a credential has been revoked or is otherwise invalid
-(CMN-9) so peers stop honouring it, but revoking authorization is an
-authorization-layer function, out of scope here; revocation across delegation
-chains is under discussion in the OAuth Working Group. Agent unavailability
-(B3-9) halts the affected subtask but does not imply revocation, since it may
-be a transient failure rather than compromise.
+Revoking authorization is an authorization-layer function, out of scope here; 
+revocation across delegation chains is under discussion in the OAuth Working Group. 
+Agent unavailability (B3-9) halts the affected subtask but does not imply revocation, 
+since it may be a transient failure rather than compromise.
 
 # IANA Considerations {#iana}
 
