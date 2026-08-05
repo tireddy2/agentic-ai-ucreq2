@@ -5,9 +5,9 @@
 Network Working Group                                           T. Reddy
 Internet-Draft                                                 Z. Sarker
 Intended status: Informational                                     Nokia
-Expires: 23 November 2026                                         K. Yao
+Expires: 6 February 2027                                          K. Yao
                                                             China Mobile
-                                                             22 May 2026
+                                                           5 August 2026
 
 
                  Agentic AI Use Cases and Requirements
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 November 2026.
+   This Internet-Draft will expire on 6 February 2027.
 
 Copyright Notice
 
@@ -66,6 +66,7 @@ Table of Contents
    1.  Introduction
    2.  Terminology
    3.  Common Protocol Requirements
+     3.1.  Network-Layer Assumptions
    4.  Use Cases
      4.1.  Simple Single-Agent Task
        4.1.1.  Description
@@ -266,11 +267,17 @@ Table of Contents
    |        | used by agents at the time of use.     |                |
    +--------+----------------------------------------+----------------+
    | CMN-9  | The protocol is required to support    | Security       |
-   |        | signaling credential revocation and    |                |
-   |        | invalid credential outcomes.           |                |
+   |        | signaling that a presented credential  |                |
+   |        | has been revoked or is otherwise       |                |
+   |        | invalid.                               |                |
    +--------+----------------------------------------+----------------+
 
                                  Table 1
+
+3.1.  Network-Layer Assumptions
+
+   The requirements in this document assume an underlying transport that
+   provides reliable, ordered, and congestion-controlled delivery.
 
 4.  Use Cases
 
@@ -309,65 +316,110 @@ Table of Contents
 
 4.1.3.  Protocol Requirements
 
-     +========+=====================================+================+
-     | REQ-ID | Description                         | Tag            |
-     +========+=====================================+================+
-     | A1-1   | The protocol is required to support | Transport      |
-     |        | incremental streaming of agent      |                |
-     |        | output, allowing partial results to |                |
-     |        | be delivered to the client before   |                |
-     |        | the agent has completed processing. |                |
-     +--------+-------------------------------------+----------------+
-     | A1-2   | The protocol is required to define  | Transport      |
-     |        | a task cancellation message that    |                |
-     |        | the client can issue at any point   |                |
-     |        | during task execution.              |                |
-     +--------+-------------------------------------+----------------+
-     | A1-3   | The protocol is required to define  | Transport      |
-     |        | structured error message types that |                |
-     |        | distinguish at minimum: transport   |                |
-     |        | failure, tool invocation failure,   |                |
-     |        | and agent processing failure.       |                |
-     +--------+-------------------------------------+----------------+
-     | A1-4   | The protocol is required to support | Transport      |
-     |        | multiple modalities for both input  |                |
-     |        | and output.                         |                |
-     +--------+-------------------------------------+----------------+
-     | A1-5   | The protocol is required to support | Discovery,     |
-     |        | modality negotiation at session     | Transport      |
-     |        | setup, allowing the client and      |                |
-     |        | agent to agree on which modalities  |                |
-     |        | are active for the session.         |                |
-     +--------+-------------------------------------+----------------+
-     | A1-6   | The protocol is required to support | Transport      |
-     |        | agent-initiated notifications to    |                |
-     |        | the client during task execution.   |                |
-     +--------+-------------------------------------+----------------+
-     | A1-7   | The protocol is required to support | Discovery,     |
-     |        | concurrent invocation of multiple   | Transport,     |
-     |        | tools within a single agent task,   | Security       |
-     |        | where tools may be operated by      |                |
-     |        | distinct providers across different |                |
-     |        | administrative domains, each with   |                |
-     |        | independent authentication and      |                |
-     |        | authorization requirements.         |                |
-     +--------+-------------------------------------+----------------+
-     | A1-8   | The protocol is required to support | Transport      |
-     |        | bulk transfer of large data between |                |
-     |        | communicating parties, applicable   |                |
-     |        | to both agent-to-tool and agent-to- |                |
-     |        | agent interactions.                 |                |
-     +--------+-------------------------------------+----------------+
-     | A1-9   | A delegation mechanism is required  | Authentication |
-     |        | to be defined by which an agent     |                |
-     |        | presents to a tool provider a       |                |
-     |        | credential attesting the            |                |
-     |        | authorization for the requested     |                |
-     |        | tool access, without exposing the   |                |
-     |        | client's primary credentials.       |                |
-     +--------+-------------------------------------+----------------+
+   This use case involves two distinct protocol interfaces: the App/
+   Agent-to-Agent interface (between the client application and the
+   agent) and the Agent-to-Tool interface (between the agent and the
+   tools it invokes).  A given requirement does not necessarily apply to
+   both.  The Interaction column indicates the interface each
+   requirement applies to.
 
-                                  Table 2
+   +========+=======================+================+================+
+   | REQ-ID | Description           | Interaction    | Tag            |
+   +========+=======================+================+================+
+   | A1-1   | The protocol is       | App/Agent-to-  | Transport      |
+   |        | required to support   | Agent          |                |
+   |        | incremental streaming |                |                |
+   |        | of agent output,      |                |                |
+   |        | allowing partial      |                |                |
+   |        | results to be         |                |                |
+   |        | delivered to the      |                |                |
+   |        | client before the     |                |                |
+   |        | agent has completed   |                |                |
+   |        | processing.           |                |                |
+   +--------+-----------------------+----------------+----------------+
+   | A1-2   | The protocol is       | App/Agent-to-  | Transport      |
+   |        | required to define a  | Agent          |                |
+   |        | task cancellation     |                |                |
+   |        | message that the      |                |                |
+   |        | client can issue at   |                |                |
+   |        | any point during task |                |                |
+   |        | execution.            |                |                |
+   +--------+-----------------------+----------------+----------------+
+   | A1-3   | The protocol is       | Both           | Transport      |
+   |        | required to define    |                |                |
+   |        | structured error      |                |                |
+   |        | message types that    |                |                |
+   |        | distinguish at        |                |                |
+   |        | minimum: transport    |                |                |
+   |        | failure, tool         |                |                |
+   |        | invocation failure,   |                |                |
+   |        | and agent processing  |                |                |
+   |        | failure.              |                |                |
+   +--------+-----------------------+----------------+----------------+
+   | A1-4   | The protocol is       | App/Agent-to-  | Transport      |
+   |        | required to support   | Agent          |                |
+   |        | multiple modalities   |                |                |
+   |        | for both input and    |                |                |
+   |        | output.               |                |                |
+   +--------+-----------------------+----------------+----------------+
+   | A1-5   | The protocol is       | App/Agent-to-  | Discovery,     |
+   |        | required to support   | Agent          | Transport      |
+   |        | modality negotiation  |                |                |
+   |        | at session setup,     |                |                |
+   |        | allowing the client   |                |                |
+   |        | and agent to agree on |                |                |
+   |        | which modalities are  |                |                |
+   |        | active for the        |                |                |
+   |        | session.              |                |                |
+   +--------+-----------------------+----------------+----------------+
+   | A1-6   | The protocol is       | App/Agent-to-  | Transport      |
+   |        | required to support   | Agent          |                |
+   |        | agent-initiated       |                |                |
+   |        | notifications to the  |                |                |
+   |        | client during task    |                |                |
+   |        | execution.            |                |                |
+   +--------+-----------------------+----------------+----------------+
+   | A1-7   | The protocol is       | Agent-to-Tool  | Discovery,     |
+   |        | required to support   |                | Transport,     |
+   |        | concurrent invocation |                | Security       |
+   |        | of multiple tools     |                |                |
+   |        | within a single agent |                |                |
+   |        | task, where tools may |                |                |
+   |        | be operated by        |                |                |
+   |        | distinct providers    |                |                |
+   |        | across different      |                |                |
+   |        | administrative        |                |                |
+   |        | domains, each with    |                |                |
+   |        | independent           |                |                |
+   |        | authentication and    |                |                |
+   |        | authorization         |                |                |
+   |        | requirements.         |                |                |
+   +--------+-----------------------+----------------+----------------+
+   | A1-8   | The protocol is       | Both           | Transport      |
+   |        | required to support   |                |                |
+   |        | bulk transfer of      |                |                |
+   |        | large data between    |                |                |
+   |        | communicating         |                |                |
+   |        | parties, applicable   |                |                |
+   |        | to both agent-to-tool |                |                |
+   |        | and agent-to-agent    |                |                |
+   |        | interactions.         |                |                |
+   +--------+-----------------------+----------------+----------------+
+   | A1-9   | A delegation          | Agent-to-Tool  | Authentication |
+   |        | mechanism is required |                |                |
+   |        | to be defined by      |                |                |
+   |        | which an agent        |                |                |
+   |        | presents to a tool    |                |                |
+   |        | provider a credential |                |                |
+   |        | attesting the         |                |                |
+   |        | authorization for the |                |                |
+   |        | requested tool        |                |                |
+   |        | access, without       |                |                |
+   |        | exposing the client's |                |                |
+   |        | primary credentials.  |                |                |
+   +--------+-----------------------+----------------+----------------+
+
+                                 Table 2
 
 4.2.  Orchestrator and Agent Collaboration
 
@@ -516,6 +568,10 @@ Table of Contents
 
                                   Table 4
 
+   Fine-grained, per-operation authorization for sensitive actions is an
+   authorization-layer function and is out of scope for this document;
+   it relies on ongoing work in the OAuth Working Group.
+
 4.4.  Peer Collaborative Multi-Agent Problem Solving
 
 4.4.1.  Description
@@ -633,6 +689,12 @@ Table of Contents
     |        | integrity-protected, such that a    |                 |
     |        | discovering agent can verify they   |                 |
     |        | have not been tampered with.        |                 |
+    +--------+-------------------------------------+-----------------+
+    | B3-9   | The protocol is required to allow a | Transport       |
+    |        | delegating agent to detect that a   |                 |
+    |        | delegated agent has become          |                 |
+    |        | unavailable and to halt the         |                 |
+    |        | affected in-flight subtask.         |                 |
     +--------+-------------------------------------+-----------------+
 
                                  Table 5
@@ -799,6 +861,12 @@ Table of Contents
    accountability, and traceability need to be considered in the design
    of agent identity mechanisms.
 
+   Revoking authorization is an authorization-layer function, out of
+   scope here; revocation across delegation chains is under discussion
+   in the OAuth Working Group.  Agent unavailability (B3-9) halts the
+   affected subtask but does not imply revocation, since it may be a
+   transient failure rather than compromise.
+
 6.  IANA Considerations
 
    This document has no IANA actions.
@@ -806,8 +874,8 @@ Table of Contents
 Acknowledgements
 
    Thanks to Borislava Gajic, Julien Maisonneuve, Parisa Foroughi,
-   Laurent Ciavaglia, Peter Leis and Sina Khatibi for the discussions
-   and comments.
+   Laurent Ciavaglia, Nathalie Romo Moreno, Peter Leis and Sina Khatibi
+   for the discussions and comments.
 
 Informative References
 
