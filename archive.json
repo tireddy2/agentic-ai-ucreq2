@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-05-28T02:40:00.771396+00:00",
+  "timestamp": "2026-08-06T02:02:00.616168+00:00",
   "repo": "tireddy2/agentic-ai-ucreq2",
   "labels": [
     {
@@ -3851,6 +3851,68 @@
       "mergeCommit": null,
       "comments": [],
       "reviews": []
+    },
+    {
+      "number": 68,
+      "id": "PR_kwDOSIVa8M77AZB_",
+      "title": "Address comments from the WG",
+      "url": "https://github.com/tireddy2/agentic-ai-ucreq2/pull/68",
+      "state": "MERGED",
+      "author": "tireddy2",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-08-05T10:03:24Z",
+      "updatedAt": "2026-08-05T13:06:49Z",
+      "baseRepository": "tireddy2/agentic-ai-ucreq2",
+      "baseRefName": "main",
+      "baseRefOid": "6cbc0f4fbbad40b2f09c4bc5054c7b9ba6ba6765",
+      "headRepository": "tireddy2/agentic-ai-ucreq2",
+      "headRefName": "tireddy2-patch-9",
+      "headRefOid": "6e24c28b55c32073a2f7b002eab92434cd42466e",
+      "closedAt": "2026-08-05T13:06:49Z",
+      "mergedAt": "2026-08-05T13:06:49Z",
+      "mergedBy": "tireddy2",
+      "mergeCommit": {
+        "oid": "584f0c9b4fae3df12028ee2acd50854013b1bb50"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOSIVa8M8AAAABIeAoNw",
+          "commit": {
+            "abbreviatedOid": "5a08644"
+          },
+          "author": "github-actions",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-08-05T10:07:45Z",
+          "updatedAt": "2026-08-05T10:07:46Z",
+          "comments": [
+            {
+              "originalPosition": 73,
+              "body": "````suggestion\nRevoking authorization is an authorization-layer function, out of scope here;\nrevocation across delegation chains is under discussion in the OAuth Working Group.\nAgent unavailability (B3-9) halts the affected subtask but does not imply revocation,\n````",
+              "createdAt": "2026-08-05T10:07:46Z",
+              "updatedAt": "2026-08-05T10:07:46Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOSIVa8M8AAAABIey29A",
+          "commit": {
+            "abbreviatedOid": "6e24c28"
+          },
+          "author": "zaheduzzaman",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "LGTM",
+          "createdAt": "2026-08-05T12:03:35Z",
+          "updatedAt": "2026-08-05T12:03:35Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
