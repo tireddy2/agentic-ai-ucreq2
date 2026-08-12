@@ -217,8 +217,8 @@ The requirements in this document assume an underlying transport that provides r
 
 # Use Cases {#usecases}
 
-These interactions differ from ordinary application-to-service invocation in 
-several respects, one being runtime selection of agents and tools by capability. 
+These interactions differ from ordinary application-to-service invocation in
+several respects, one being runtime selection of agents and tools by capability.
 An agent's internal processing, including perception, planning and
 re-planning, and invocation of its AI model, is not visible on the protocol
 interface and is out of scope; it motivates the use cases but drives no
