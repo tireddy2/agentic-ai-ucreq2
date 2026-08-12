@@ -100,8 +100,8 @@ patterns of agentic AI communication systems, and derives protocol
 requirements from those use cases. The requirements are intended to
 drive development of protocols and a protocol framework for agentic AI systems.
 
-Each use case contributes a distinct slice of requirements, and it is their 
-composition that distinguishes an agentic communication protocol from ordinary 
+Each use case contributes a distinct slice of requirements, and it is their
+composition that distinguishes an agentic communication protocol from ordinary
 application-to-service invocation.
 
 The use cases in this document cover interaction patterns for
