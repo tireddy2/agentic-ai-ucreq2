@@ -100,8 +100,8 @@ patterns of agentic AI communication systems, and derives protocol
 requirements from those use cases. The requirements are intended to
 drive development of protocols and a protocol framework for agentic AI systems.
 
-Each use case contributes a distinct slice of requirements, and it is their
-composition that distinguishes an agentic communication protocol from ordinary
+Each use case contributes a distinct slice of requirements, and it is their 
+composition that distinguishes an agentic communication protocol from ordinary 
 application-to-service invocation.
 
 The use cases in this document cover interaction patterns for
@@ -217,8 +217,8 @@ The requirements in this document assume an underlying transport that provides r
 
 # Use Cases {#usecases}
 
-These interactions differ from ordinary application-to-service invocation in
-several respects, one being runtime selection of agents and tools by capability.
+These interactions differ from ordinary application-to-service invocation in 
+several respects, one being runtime selection of agents and tools by capability. 
 An agent's internal processing, including perception, planning and
 re-planning, and invocation of its AI model, is not visible on the protocol
 interface and is out of scope; it motivates the use cases but drives no
@@ -429,6 +429,7 @@ and introduces additional requirements specific to multi-hop delegation chains.
 | B3-9 | The protocol is required to allow a delegating agent to detect that a delegated agent has become unavailable and to halt the affected in-flight subtask. | Transport |
 | B3-10 | The protocol is required to provide a verifiable provenance record of a request and its response as they traverse the delegation chain, attributing each transformation to the hop that performed it, such that removal of a hop, or a modification not attributable to a signing hop, is detectable. | Authentication, Security |
 | B3-11 | The protocol is required to enable a receiving party to detect and reject a delegation chain that contains a cycle, such as a chain in which the receiving party's own identifier already appears. | Authentication, Security |
+| B3-12 | The protocol is required to enable a receiving party to determine that the authority conveyed to it does not exceed the authority conveyed to the hop it received from. | Authentication, Security |
 
 ## Cooperative Reasoning and Consensus Formation {#cooperative-reasoning}
 
@@ -554,7 +555,7 @@ in [MCP] and the agent routing patterns discussed in [A2A].
 
 # Relationship to OAuth and WIMSE Work {#relationship-oauth-wimse}
 
-Several requirements in this document concern authorization, delegation, and agent identity (CMN-4, CMN-8, CMN-9, CMN-10, B2-2 to B2-6, B3-1 to B3-4, B3-10, B3-11). These are expected to be addressed in the OAuth and WIMSE Working Groups.
+Several requirements in this document concern authorization, delegation, and agent identity (CMN-4, CMN-8, CMN-9, CMN-10, B2-2 to B2-6, B3-1 to B3-4, B3-10, B3-11, B3-12). These are expected to be addressed in the OAuth and WIMSE Working Groups.
 
 
 # Accountability and Auditing {#accountability-auditing}
