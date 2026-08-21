@@ -5,9 +5,9 @@
 Network Working Group                                           T. Reddy
 Internet-Draft                                                 Z. Sarker
 Intended status: Informational                                     Nokia
-Expires: 18 February 2027                                         K. Yao
+Expires: 22 February 2027                                         K. Yao
                                                             China Mobile
-                                                          17 August 2026
+                                                          21 August 2026
 
 
                  Agentic AI Use Cases and Requirements
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 18 February 2027.
+   This Internet-Draft will expire on 22 February 2027.
 
 Copyright Notice
 
@@ -747,6 +747,12 @@ Table of Contents
     |        | in which the receiving party's own  |                 |
     |        | identifier already appears.         |                 |
     +--------+-------------------------------------+-----------------+
+    | B3-12  | The protocol is required to enable  | Authentication, |
+    |        | a receiving party to determine that | Security        |
+    |        | the authority conveyed to it does   |                 |
+    |        | not exceed the authority conveyed   |                 |
+    |        | to the hop it received from.        |                 |
+    +--------+-------------------------------------+-----------------+
 
                                  Table 5
 
@@ -891,7 +897,7 @@ Table of Contents
 
    Several requirements in this document concern authorization,
    delegation, and agent identity (CMN-4, CMN-8, CMN-9, CMN-10, B2-2 to
-   B2-6, B3-1 to B3-4, B3-10, B3-11).  These are expected to be
+   B2-6, B3-1 to B3-4, B3-10, B3-11, B3-12).  These are expected to be
    addressed in the OAuth and WIMSE Working Groups.
 
 6.  Accountability and Auditing

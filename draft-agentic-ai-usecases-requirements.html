@@ -21,14 +21,14 @@ communication security, agent identity and authentication.
 <meta content="draft-agentic-ai-usecases-requirements-latest-00" name="ietf.draft">
 <!-- Generator version information:
   xml2rfc 3.34.0
-    Python 3.14.5
+    Python 3.14.7
     ConfigArgParse 1.7.5
     google-i18n-address 3.1.1
     intervaltree 3.2.1
     Jinja2 3.1.6
     lxml 6.1.1
     natsort 8.4.0
-    platformdirs 4.11.0
+    platformdirs 4.11.3
     pycountry 24.6.1
     PyYAML 6.0.3
     requests 2.33.1
@@ -1052,7 +1052,7 @@ svg {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Reddy, et al.</td>
-<td class="center">Expires 18 February 2027</td>
+<td class="center">Expires 22 February 2027</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1065,12 +1065,12 @@ svg {
 <dd class="internet-draft">draft-agentic-ai-usecases-requirements-latest-00</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-08-17" class="published">17 August 2026</time>
+<time datetime="2026-08-21" class="published">21 August 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2027-02-18">18 February 2027</time></dd>
+<dd class="expires"><time datetime="2027-02-22">22 February 2027</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1125,7 +1125,7 @@ communication security, agent identity and authentication.<a href="#section-abst
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 18 February 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 22 February 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1923,6 +1923,11 @@ and introduces additional requirements specific to multi-hop delegation chains.<
                 <td class="text-left" rowspan="1" colspan="1">The protocol is required to enable a receiving party to detect and reject a delegation chain that contains a cycle, such as a chain in which the receiving party's own identifier already appears.</td>
                 <td class="text-left" rowspan="1" colspan="1">Authentication, Security</td>
               </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">B3-12</td>
+                <td class="text-left" rowspan="1" colspan="1">The protocol is required to enable a receiving party to determine that the authority conveyed to it does not exceed the authority conveyed to the hop it received from.</td>
+                <td class="text-left" rowspan="1" colspan="1">Authentication, Security</td>
+              </tr>
             </tbody>
           </table>
 </section>
@@ -2121,7 +2126,7 @@ in <span>[<a href="#MCP" class="cite xref">MCP</a>]</span> and the agent routing
       <h2 id="name-relationship-to-oauth-and-w">
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-relationship-to-oauth-and-w" class="section-name selfRef">Relationship to OAuth and WIMSE Work</a>
       </h2>
-<p id="section-5-1">Several requirements in this document concern authorization, delegation, and agent identity (CMN-4, CMN-8, CMN-9, CMN-10, B2-2 to B2-6, B3-1 to B3-4, B3-10, B3-11). These are expected to be addressed in the OAuth and WIMSE Working Groups.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-1">Several requirements in this document concern authorization, delegation, and agent identity (CMN-4, CMN-8, CMN-9, CMN-10, B2-2 to B2-6, B3-1 to B3-4, B3-10, B3-11, B3-12). These are expected to be addressed in the OAuth and WIMSE Working Groups.<a href="#section-5-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="accountability-auditing">
