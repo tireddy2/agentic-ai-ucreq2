@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-08-18T00:53:31.399163+00:00",
+  "timestamp": "2026-08-23T00:58:20.209880+00:00",
   "repo": "tireddy2/agentic-ai-ucreq2",
   "labels": [
     {
@@ -3984,6 +3984,61 @@
               "body": "````suggestion\nEach use case contributes a distinct slice of requirements, and it is their\ncomposition that distinguishes an agentic communication protocol from ordinary\n````",
               "createdAt": "2026-08-12T08:15:08Z",
               "updatedAt": "2026-08-12T08:15:08Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 71,
+      "id": "PR_kwDOSIVa8M8AAAABAYQfcw",
+      "title": "Address comment from Sumit",
+      "url": "https://github.com/tireddy2/agentic-ai-ucreq2/pull/71",
+      "state": "MERGED",
+      "author": "tireddy2",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-08-20T06:50:43Z",
+      "updatedAt": "2026-08-21T06:52:06Z",
+      "baseRepository": "tireddy2/agentic-ai-ucreq2",
+      "baseRefName": "main",
+      "baseRefOid": "0a28824a1f3d6b48c7b158aefe1bc07d64a2ff35",
+      "headRepository": "tireddy2/agentic-ai-ucreq2",
+      "headRefName": "tireddy2-patch-12",
+      "headRefOid": "d673605d7aae99aef6b462863f33f012ce577ae2",
+      "closedAt": "2026-08-21T06:52:06Z",
+      "mergedAt": "2026-08-21T06:52:06Z",
+      "mergedBy": "tireddy2",
+      "mergeCommit": {
+        "oid": "2949be320088b851429780543a389d58bf2665e4"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOSIVa8M8AAAABKNJz6A",
+          "commit": {
+            "abbreviatedOid": "f2365ff"
+          },
+          "author": "github-actions",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-08-20T06:51:05Z",
+          "updatedAt": "2026-08-20T06:51:05Z",
+          "comments": [
+            {
+              "originalPosition": 18,
+              "body": "````suggestion\nThese interactions differ from ordinary application-to-service invocation in\nseveral respects, one being runtime selection of agents and tools by capability.\n````",
+              "createdAt": "2026-08-20T06:51:05Z",
+              "updatedAt": "2026-08-20T06:51:05Z"
+            },
+            {
+              "originalPosition": 7,
+              "body": "````suggestion\nEach use case contributes a distinct slice of requirements, and it is their\ncomposition that distinguishes an agentic communication protocol from ordinary\n````",
+              "createdAt": "2026-08-20T06:51:05Z",
+              "updatedAt": "2026-08-20T06:51:05Z"
             }
           ]
         }
