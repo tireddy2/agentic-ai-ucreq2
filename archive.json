@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-08-23T00:58:20.209880+00:00",
+  "timestamp": "2026-09-01T03:07:59.934461+00:00",
   "repo": "tireddy2/agentic-ai-ucreq2",
   "labels": [
     {
@@ -727,9 +727,17 @@
       "labels": [],
       "body": "It is common for all the use cases. ",
       "createdAt": "2026-05-26T09:59:23Z",
-      "updatedAt": "2026-05-26T09:59:23Z",
+      "updatedAt": "2026-08-31T17:56:24Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "tyche-dev",
+          "authorAssociation": "NONE",
+          "body": "Suggested text for the editors, following the agentproto discussion:\n\n> The recipient is required to retain the state needed to detect reuse for at least as long as the authorization or delegation artifact can be accepted, and a repeated presentation is required not to cause the authorized action instance to be performed more than once.\n\nThis makes the bounded acceptance interval\u2019s relationship to retained anti-replay state explicit, while avoiding an impossible requirement to infer whether an identical duplicate was benign or adversarial.",
+          "createdAt": "2026-08-31T17:56:24Z",
+          "updatedAt": "2026-08-31T17:56:24Z"
+        }
+      ]
     }
   ],
   "pulls": [
