@@ -41,6 +41,10 @@ informative:
     title: "Model Context Protocol Specification"
     target: https://modelcontextprotocol.io/specification/2025-11-25
 
+  AGTP:
+    title: "Agent Transfer Protocol (AGTP)"
+    target: https://datatracker.ietf.org/doc/draft-hood-independent-agtp/
+
   SCRM:
     title: "Agentic AI Use Cases"
     target: https://datatracker.ietf.org/doc/draft-scrm-aiproto-usecases
@@ -108,7 +112,7 @@ The use cases in this document cover interaction patterns for
 agentic AI communication systems. This document takes into account
 related use case and problem statement documents including [SCRM],
 [YAO], [SONG], and [ROSENBERG], and existing protocol work including
-[A2A] and [MCP].
+[A2A], [MCP], and [AGTP].
 
 # Terminology {#terminology}
 
