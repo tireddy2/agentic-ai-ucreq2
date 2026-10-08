@@ -784,8 +784,8 @@ Table of Contents
     |        | discovering agent can verify they   |                 |
     |        | have not been tampered with.        |                 |
     +--------+-------------------------------------+-----------------+
-    | B3-9   | The protocol is required to allow a | Dialog          |
-    |        | delegating agent to detect that a   |                 |
+    | B3-9   | The protocol is required to allow a | Dialog,         |
+    |        | delegating agent to detect that a   | Transport       |
     |        | delegated agent has become          |                 |
     |        | unavailable and to halt the         |                 |
     |        | affected in-flight subtask.         |                 |
