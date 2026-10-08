@@ -1982,7 +1982,7 @@ and introduces additional requirements specific to multi-hop delegation chains.<
               </tr>
               <tr>
                 <td class="text-left" rowspan="1" colspan="1">B3-13</td>
-                <td class="text-left" rowspan="1" colspan="1">The protocol is required to enable a participant to associate each downstream interaction with the upstream interaction that caused it, so that cancellation, failure, and resumption can be propagated along the delegation chain.</td>
+                <td class="text-left" rowspan="1" colspan="1">The protocol is required to propagate the dialog context across each hop of a delegation chain, so that participants can correlate interactions along the chain.</td>
                 <td class="text-left" rowspan="1" colspan="1">Dialog</td>
               </tr>
             </tbody>
@@ -2199,10 +2199,9 @@ in <span>[<a href="#MCP" class="cite xref">MCP</a>]</span> and the agent routing
       </h2>
 <p id="section-6-1">Accountability and auditing of agent actions are out of scope for this
 document. Audit and provenance representation is addressed by existing work,
-including W3C provenance (PROV) and Trace Context, and by the proposed IETF
-AUDIT (Agent Use of Delegation and Interaction Traceability) BOF. Dialog
-identifiers can be used to correlate audit records across the participants in
-a dialog.<a href="#section-6-1" class="pilcrow">¶</a></p>
+including W3C provenance (PROV) and Trace Context. Dialog identifiers can be
+used to correlate audit records across the participants in a dialog.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-2">Editor's note: Add a reference to IETF audit work once it progresses.<a href="#section-6-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="security">

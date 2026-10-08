@@ -813,13 +813,11 @@ Table of Contents
     |        | not exceed the authority conveyed   |                 |
     |        | to the hop it received from.        |                 |
     +--------+-------------------------------------+-----------------+
-    | B3-13  | The protocol is required to enable  | Dialog          |
-    |        | a participant to associate each     |                 |
-    |        | downstream interaction with the     |                 |
-    |        | upstream interaction that caused    |                 |
-    |        | it, so that cancellation, failure,  |                 |
-    |        | and resumption can be propagated    |                 |
-    |        | along the delegation chain.         |                 |
+    | B3-13  | The protocol is required to         | Dialog          |
+    |        | propagate the dialog context across |                 |
+    |        | each hop of a delegation chain, so  |                 |
+    |        | that participants can correlate     |                 |
+    |        | interactions along the chain.       |                 |
     +--------+-------------------------------------+-----------------+
 
                                  Table 5
@@ -986,10 +984,11 @@ Table of Contents
 
    Accountability and auditing of agent actions are out of scope for
    this document.  Audit and provenance representation is addressed by
-   existing work, including W3C provenance (PROV) and Trace Context, and
-   by the proposed IETF AUDIT (Agent Use of Delegation and Interaction
-   Traceability) BOF.  Dialog identifiers can be used to correlate audit
-   records across the participants in a dialog.
+   existing work, including W3C provenance (PROV) and Trace Context.
+   Dialog identifiers can be used to correlate audit records across the
+   participants in a dialog.
+
+   Editor's note: Add a reference to IETF audit work once it progresses.
 
 7.  Security Considerations
 
