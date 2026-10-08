@@ -13,26 +13,26 @@
 and derives protocol requirements from those use cases. The requirements
 are intended to guide IETF standardization work on protocols in the
 context of agent-to-agent communication, agent-to-tool communication,
-with focus on multimodal communication, session management, discovery,
+with focus on dialog management, transport, multimodal communication,
 communication security, agent identity and authentication. 
     " name="description">
-<meta content="xml2rfc 3.34.0" name="generator">
+<meta content="xml2rfc 3.34.1" name="generator">
 <meta content="Internet-Draft" name="keyword">
-<meta content="draft-agentic-ai-usecases-requirements-latest-00" name="ietf.draft">
+<meta content="draft-agentic-ai-usecases-requirements-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.34.0
-    Python 3.14.7
-    ConfigArgParse 1.7.5
+  xml2rfc 3.34.1
+    Python 3.14.8
+    ConfigArgParse 1.8.0
     google-i18n-address 3.1.1
     intervaltree 3.2.1
     Jinja2 3.1.6
     lxml 6.1.1
     natsort 8.4.0
-    platformdirs 4.11.3
+    platformdirs 4.12.2
     pycountry 24.6.1
     PyYAML 6.0.3
     requests 2.33.1
-    wcwidth 0.8.2
+    wcwidth 0.9.1
 -->
 <link href="draft-agentic-ai-usecases-requirements.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -1048,11 +1048,11 @@ svg {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">agentic-ai-ucreq</td>
-<td class="right">August 2026</td>
+<td class="right">October 2026</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Reddy, et al.</td>
-<td class="center">Expires 21 February 2027</td>
+<td class="center">Expires 11 April 2027</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1062,15 +1062,15 @@ svg {
 <dt class="label-workgroup">Workgroup:</dt>
 <dd class="workgroup">Network Working Group</dd>
 <dt class="label-internet-draft">Internet-Draft:</dt>
-<dd class="internet-draft">draft-agentic-ai-usecases-requirements-latest-00</dd>
+<dd class="internet-draft">draft-agentic-ai-usecases-requirements-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-08-20" class="published">20 August 2026</time>
+<time datetime="2026-10-08" class="published">8 October 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2027-02-21">21 February 2027</time></dd>
+<dd class="expires"><time datetime="2027-04-11">11 April 2027</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1095,7 +1095,7 @@ svg {
 and derives protocol requirements from those use cases. The requirements
 are intended to guide IETF standardization work on protocols in the
 context of agent-to-agent communication, agent-to-tool communication,
-with focus on multimodal communication, session management, discovery,
+with focus on dialog management, transport, multimodal communication,
 communication security, agent identity and authentication.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
@@ -1125,7 +1125,7 @@ communication security, agent identity and authentication.<a href="#section-abst
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 21 February 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 11 April 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1159,12 +1159,17 @@ communication security, agent identity and authentication.<a href="#section-abst
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
             <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-terminology" class="internal xref">Terminology</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.1">
+                <p id="section-toc.1-1.2.2.1.1" class="keepWithNext"><a href="#section-2.1" class="auto internal xref">2.1</a>.  <a href="#name-dialog-context-and-task-con" class="internal xref">Dialog Context and Task Context</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
             <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-common-protocol-requirement" class="internal xref">Common Protocol Requirements</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
-                <p id="section-toc.1-1.3.2.1.1" class="keepWithNext"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-network-layer-assumptions" class="internal xref">Network-Layer Assumptions</a></p>
+                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-network-layer-assumptions" class="internal xref">Network-Layer Assumptions</a></p>
 </li>
             </ul>
 </li>
@@ -1237,10 +1242,7 @@ communication security, agent identity and authentication.<a href="#section-abst
                     <p id="section-toc.1-1.4.2.5.2.2.1"><a href="#section-4.5.2" class="auto internal xref">4.5.2</a>.  <a href="#name-interaction-flow-5" class="internal xref">Interaction Flow</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.5.2.3">
-                    <p id="section-toc.1-1.4.2.5.2.3.1"><a href="#section-4.5.3" class="auto internal xref">4.5.3</a>.  <a href="#name-protocol-requirements-3" class="internal xref">Protocol Requirements</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.5.2.4">
-                    <p id="section-toc.1-1.4.2.5.2.4.1"><a href="#section-4.5.4" class="auto internal xref">4.5.4</a>.  <a href="#name-additional-protocol-requireme" class="internal xref">Additional Protocol Requirements</a></p>
+                    <p id="section-toc.1-1.4.2.5.2.3.1"><a href="#section-4.5.3" class="auto internal xref">4.5.3</a>.  <a href="#name-additional-protocol-requireme" class="internal xref">Additional Protocol Requirements</a></p>
 </li>
                 </ul>
 </li>
@@ -1301,7 +1303,8 @@ reasoning over its goals and context.<a href="#section-1-1" class="pilcrow">¶</
 <p id="section-1-2">This document presents use cases that illustrate the key interaction
 patterns of agentic AI communication systems, and derives protocol
 requirements from those use cases. The requirements are intended to
-drive development of protocols and a protocol framework for agentic AI systems.<a href="#section-1-2" class="pilcrow">¶</a></p>
+drive development of the agentic dialog management protocol, its
+transport bindings, and the reference architecture for agentic AI systems.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">Each use case contributes a distinct slice of requirements, and it is their
 composition that distinguishes an agentic communication protocol from ordinary
 application-to-service invocation.<a href="#section-1-3" class="pilcrow">¶</a></p>
@@ -1336,43 +1339,63 @@ as distinguished from communication between an agent and a user or
 between an agent and a tool.<a href="#section-2-4" class="pilcrow">¶</a></p>
 <p id="section-2-5"><strong>Capability</strong>: A description of what an agent can
 perform, including inputs, outputs, constraints, and required conditions.<a href="#section-2-5" class="pilcrow">¶</a></p>
-<p id="section-2-6"><strong>Context</strong>: The set of data, state, and history shared between agents
-to enable task execution and coordination.<a href="#section-2-6" class="pilcrow">¶</a></p>
-<p id="section-2-7"><strong>Coordinator Agent</strong>: An agent that distributes a shared problem or task
+<p id="section-2-6"><strong>Coordinator Agent</strong>: An agent that distributes a shared problem or task
 to a group of peer agents, aggregates their outputs, and iteratively drives
-them toward a collective result or consensus.<a href="#section-2-7" class="pilcrow">¶</a></p>
-<p id="section-2-8"><strong>Delegation</strong>: The act of an agent requesting another agent to execute
-a task on its behalf.<a href="#section-2-8" class="pilcrow">¶</a></p>
-<p id="section-2-9"><strong>Initiating Agent</strong>: An agent that receives an initial request and
+them toward a collective result or consensus.<a href="#section-2-6" class="pilcrow">¶</a></p>
+<p id="section-2-7"><strong>Delegation</strong>: The act of an agent requesting another agent to execute
+a task on its behalf.<a href="#section-2-7" class="pilcrow">¶</a></p>
+<p id="section-2-8"><strong>Initiating Agent</strong>: An agent that receives an initial request and
 delegates subtasks to peer agents. Any peer agent may itself delegate
-further to other agents without routing through the initiating agent.<a href="#section-2-9" class="pilcrow">¶</a></p>
-<p id="section-2-10"><strong>Mediator</strong>: An entity that serves as a proxy or mediator for
+further to other agents without routing through the initiating agent.<a href="#section-2-8" class="pilcrow">¶</a></p>
+<p id="section-2-9"><strong>Mediator</strong>: An entity that serves as a proxy or mediator for
 external tools, APIs, databases, or other resources that other agents
-require but cannot directly access.<a href="#section-2-10" class="pilcrow">¶</a></p>
-<p id="section-2-11"><strong>Message</strong>: A discrete unit of communication exchanged between agents
+require but cannot directly access.<a href="#section-2-9" class="pilcrow">¶</a></p>
+<p id="section-2-10"><strong>Message</strong>: A discrete unit of communication exchanged between agents
 containing structured data such as a task request, response, progress
-update, event notification, or control signal.<a href="#section-2-11" class="pilcrow">¶</a></p>
-<p id="section-2-12"><strong>Modality</strong>: A category of data format used for input or output in
-agent communication, such as text, audio, image, or video. A session
-may support one or more modalities simultaneously.<a href="#section-2-12" class="pilcrow">¶</a></p>
-<p id="section-2-13"><strong>Orchestrator Agent</strong>: An agent that acts as a controller,
+update, event notification, or control signal.<a href="#section-2-10" class="pilcrow">¶</a></p>
+<p id="section-2-11"><strong>Modality</strong>: A category of data format used for input or output in
+agent communication, such as text, audio, image, or video. A dialog
+may support one or more modalities simultaneously.<a href="#section-2-11" class="pilcrow">¶</a></p>
+<p id="section-2-12"><strong>Orchestrator Agent</strong>: An agent that acts as a controller,
 coordinating the activity of other agents by decomposing goals into
-sub-tasks and delegating those sub-tasks to appropriate agents.<a href="#section-2-13" class="pilcrow">¶</a></p>
-<p id="section-2-14"><strong>Peer Agent</strong>: An agent that receives delegated subtasks from another
-agent and may itself delegate further to other agents.<a href="#section-2-14" class="pilcrow">¶</a></p>
-<p id="section-2-15"><strong>Session</strong>: A logical communication exchange shared between two or more
-agents over a period of time, which may persist across multiple
-individual message exchanges and network connections. A session can carry
-and maintain one or more contexts shared between agents.<a href="#section-2-15" class="pilcrow">¶</a></p>
-<p id="section-2-16"><strong>Task</strong>: A unit of work submitted by a user to an agent, or
-delegated by one agent to another.<a href="#section-2-16" class="pilcrow">¶</a></p>
-<p id="section-2-17"><strong>Task State</strong>: The current execution status of a task (e.g., pending,
-in-progress, completed, failed).<a href="#section-2-17" class="pilcrow">¶</a></p>
-<p id="section-2-18"><strong>Tool</strong>: An external service invoked by an agent to retrieve data or
+sub-tasks and delegating those sub-tasks to appropriate agents.<a href="#section-2-12" class="pilcrow">¶</a></p>
+<p id="section-2-13"><strong>Peer Agent</strong>: An agent that receives delegated subtasks from another
+agent and may itself delegate further to other agents.<a href="#section-2-13" class="pilcrow">¶</a></p>
+<p id="section-2-14"><strong>Dialog</strong>: The correlated sequence of interactions between two or
+more participants (users, agents, and tools) over the course of a task. A
+dialog may persist across multiple individual message exchanges and network
+connections.<a href="#section-2-14" class="pilcrow">¶</a></p>
+<p id="section-2-15"><strong>Dialog Context</strong>: The identifiers and lifecycle state needed to
+correlate and maintain a dialog. It does not include the content exchanged
+with AI models, such as conversation memory, retrieved documents, or prompts.<a href="#section-2-15" class="pilcrow">¶</a></p>
+<p id="section-2-16"><strong>Task Context</strong>: The data that a participant maintains
+to execute a task, such as conversation history and intermediate
+results. Task context is not carried by the protocol.<a href="#section-2-16" class="pilcrow">¶</a></p>
+<p id="section-2-17"><strong>Task</strong>: A unit of work submitted by a user to an agent, or
+delegated by one agent to another.<a href="#section-2-17" class="pilcrow">¶</a></p>
+<p id="section-2-18"><strong>Task State</strong>: The current execution status of a task (e.g., pending,
+in-progress, completed, failed).<a href="#section-2-18" class="pilcrow">¶</a></p>
+<p id="section-2-19"><strong>Tool</strong>: An external service invoked by an agent to retrieve data or
 perform operations. A tool is not necessarily an agent and may not participate
-in agent-to-agent communication.<a href="#section-2-18" class="pilcrow">¶</a></p>
-<p id="section-2-19"><strong>User</strong>: A human that initiates interaction with an
-AI agent by submitting a request or task.<a href="#section-2-19" class="pilcrow">¶</a></p>
+in agent-to-agent communication.<a href="#section-2-19" class="pilcrow">¶</a></p>
+<p id="section-2-20"><strong>User</strong>: A human that initiates interaction with an
+AI agent by submitting a request or task.<a href="#section-2-20" class="pilcrow">¶</a></p>
+<div id="dialog-task-context">
+<section id="section-2.1">
+        <h3 id="name-dialog-context-and-task-con">
+<a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-dialog-context-and-task-con" class="section-name selfRef">Dialog Context and Task Context</a>
+        </h3>
+<p id="section-2.1-1">Any participant, including an intermediary, can use
+dialog context to correlate and maintain a dialog without interpreting
+the task. For example, if the transport connection between two agents
+is interrupted, the dialog identifier allows the reconnecting agent to
+re-associate with the existing dialog instead of starting a new dialog
+and restarting the task. An intermediary uses the dialog identifier to
+correlate the requests it receives with the requests it forwards.
+Neither function requires access to the task context. Each participant
+can use the dialog identifier to retrieve its own task context.<a href="#section-2.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 <div id="common-requirements">
@@ -1387,13 +1410,16 @@ AI agent by submitting a request or task.<a href="#section-2-19" class="pilcrow"
           <p id="section-3-3.1.1"><strong>Discovery</strong>: Requirements related to locating, advertising, or selecting agents, tools, or capabilities.<a href="#section-3-3.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-3-3.2">
-          <p id="section-3-3.2.1"><strong>Transport</strong>: Requirements related to message delivery, streaming, cancellation, session management, and data transfer.<a href="#section-3-3.2.1" class="pilcrow">¶</a></p>
+          <p id="section-3-3.2.1"><strong>Dialog</strong>: Requirements related to dialog correlation, lifecycle, continuity, and recovery.<a href="#section-3-3.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-3-3.3">
-          <p id="section-3-3.3.1"><strong>Security</strong>: Requirements related to confidentiality, integrity, and authorization.<a href="#section-3-3.3.1" class="pilcrow">¶</a></p>
+          <p id="section-3-3.3.1"><strong>Transport</strong>: Requirements related to message delivery, streaming, cancellation, and data transfer.<a href="#section-3-3.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-3-3.4">
-          <p id="section-3-3.4.1"><strong>Authentication</strong>: Requirements related to identity verification and credential delegation.<a href="#section-3-3.4.1" class="pilcrow">¶</a></p>
+          <p id="section-3-3.4.1"><strong>Security</strong>: Requirements related to confidentiality, integrity, and authorization.<a href="#section-3-3.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-3-3.5">
+          <p id="section-3-3.5.1"><strong>Authentication</strong>: Requirements related to identity verification and credential delegation.<a href="#section-3-3.5.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <table class="center" id="table-1">
@@ -1456,6 +1482,11 @@ AI agent by submitting a request or task.<a href="#section-2-19" class="pilcrow"
             <td class="text-left" rowspan="1" colspan="1">The protocol is required to support revoking a previously granted authorization, including propagating the revocation across a delegation chain so that affected agents cease to act under it.</td>
             <td class="text-left" rowspan="1" colspan="1">Security</td>
           </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">CMN-11</td>
+            <td class="text-left" rowspan="1" colspan="1">The protocol is required to support establishment, modification, and termination of a dialog, distinct from cancellation of a delegated subtask within the dialog. Modification includes changes to the participants, modalities, or lifetime of the dialog. The protocol is required to support a dialog lifetime, after which the dialog is terminated.</td>
+            <td class="text-left" rowspan="1" colspan="1">Dialog</td>
+          </tr>
         </tbody>
       </table>
 <div id="network-assumptions">
@@ -1463,7 +1494,13 @@ AI agent by submitting a request or task.<a href="#section-2-19" class="pilcrow"
         <h3 id="name-network-layer-assumptions">
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-network-layer-assumptions" class="section-name selfRef">Network-Layer Assumptions</a>
         </h3>
-<p id="section-3.1-1">The requirements in this document assume an underlying transport that provides reliable, ordered, and congestion-controlled delivery.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1-1">The requirements in this document assume that messages
+that establish, modify, resume, or terminate a dialog are delivered
+reliably and in order. Data for real-time modalities, such as
+interactive audio and video, can be delivered without reliability or
+ordering to meet latency requirements. All delivery is assumed to be
+congestion controlled. Whether these share a transport connection is
+determined by the transport bindings.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1478,10 +1515,14 @@ several respects, one being runtime selection of agents and tools by capability.
 An agent's internal processing, including perception, planning and
 re-planning, and invocation of its AI model, is not visible on the protocol
 interface and is out of scope; it motivates the use cases but drives no
-protocol requirement. Cross-domain operation can apply to any of these use
-cases; crossing an administrative boundary adds no new protocol requirement
-beyond authentication and authorization, which map to the OAuth and WIMSE work
-discussed in <a href="#relationship-oauth-wimse" class="auto internal xref">Section 5</a>.<a href="#section-4-1" class="pilcrow">¶</a></p>
+protocol requirement. Cross-domain operation can apply to any of
+these use cases. Crossing an administrative boundary adds authentication and
+authorization requirements, which map to the OAuth and WIMSE work discussed in
+<a href="#relationship-oauth-wimse" class="auto internal xref">Section 5</a>, and privacy requirements on dialog context
+propagated across the boundary, discussed in <a href="#security" class="auto internal xref">Section 7</a>. The use
+cases are independent of deployment model: they apply whether participants are
+within a single administrative domain or span several, and whether they
+interact directly or through intermediaries.<a href="#section-4-1" class="pilcrow">¶</a></p>
 <div id="simple-single-agent">
 <section id="section-4.1">
         <h3 id="name-simple-single-agent-task">
@@ -1498,7 +1539,7 @@ results to the user. The tools invoked by the agent may reside in
 the same or a different administrative domain. The agent protocol
 is required to support multiple input and output modalities, and
 the client application and agent are required to be able to negotiate which
-modalities are active for the session.<a href="#section-4.1.1-1" class="pilcrow">¶</a></p>
+modalities are active for the dialog.<a href="#section-4.1.1-1" class="pilcrow">¶</a></p>
 <p id="section-4.1.1-2">This use case covers the protocol interface between the client
 application and the agent. The interaction between the user and
 the client application is out of scope. This use case assumes that
@@ -1576,7 +1617,7 @@ interface each applies to.<a href="#section-4.1.3-1" class="pilcrow">¶</a></p>
               </tr>
               <tr>
                 <td class="text-left" rowspan="1" colspan="1">A1-5</td>
-                <td class="text-left" rowspan="1" colspan="1">The protocol is required to support modality negotiation at session setup, allowing the client and agent to agree on which modalities are active for the session.</td>
+                <td class="text-left" rowspan="1" colspan="1">The protocol is required to support modality negotiation at dialog establishment, allowing the client and agent to agree on which modalities are active for the dialog.</td>
                 <td class="text-left" rowspan="1" colspan="1">App/Agent-to-Agent</td>
                 <td class="text-left" rowspan="1" colspan="1">Discovery, Transport</td>
               </tr>
@@ -1603,6 +1644,12 @@ interface each applies to.<a href="#section-4.1.3-1" class="pilcrow">¶</a></p>
                 <td class="text-left" rowspan="1" colspan="1">A delegation mechanism is required to be defined by which an agent presents to a tool provider a credential attesting the authorization for the requested tool access, without exposing the client's primary credentials.</td>
                 <td class="text-left" rowspan="1" colspan="1">Agent-to-Tool</td>
                 <td class="text-left" rowspan="1" colspan="1">Authentication</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">A1-10</td>
+                <td class="text-left" rowspan="1" colspan="1">The protocol is required to preserve the dialog context when a participant transforms data from one modality to another, such as audio to text.</td>
+                <td class="text-left" rowspan="1" colspan="1">App/Agent-to-Agent</td>
+                <td class="text-left" rowspan="1" colspan="1">Dialog</td>
               </tr>
             </tbody>
           </table>
@@ -1631,10 +1678,10 @@ call processes only what is explicitly provided with a particular context,
 with no persistent memory between calls. The application
 layer is responsible for maintaining the context across the calls by
 carrying conversation history, intermediate results, and task
-state. Session continuity is therefore required to preserve this
-accumulated context across network interruptions, ensuring that a
-reconnecting agent can restore the prior task context without
-having to reconstruct it from scratch.<a href="#section-4.2.1-2" class="pilcrow">¶</a></p>
+state. Dialog continuity is therefore required to preserve the
+dialog context across network interruptions, so that a reconnecting
+agent can re-associate with the dialog and use it to restore its own
+task context without reconstructing it from scratch.<a href="#section-4.2.1-2" class="pilcrow">¶</a></p>
 <p id="section-4.2.1-3">This pattern is described in <span>[<a href="#ROSENBERG" class="cite xref">ROSENBERG</a>]</span> and reflected in <span>[<a href="#A2A" class="cite xref">A2A</a>]</span>,
 and is implemented in deployed multi-agent frameworks including
 <span>[<a href="#AUTOGEN" class="cite xref">AUTOGEN</a>]</span>, <span>[<a href="#LANGCHAIN" class="cite xref">LANGCHAIN</a>]</span>, and <span>[<a href="#OPENAI-AGENTS" class="cite xref">OPENAI-AGENTS</a>]</span>.<a href="#section-4.2.1-3" class="pilcrow">¶</a></p>
@@ -1702,8 +1749,13 @@ and is implemented in deployed multi-agent frameworks including
               </tr>
               <tr>
                 <td class="text-left" rowspan="1" colspan="1">B1-6</td>
-                <td class="text-left" rowspan="1" colspan="1">The protocol is required to support persistent session identifiers that survive network interruption, and is required to define a session resumption message by which an agent re-attaches to an interrupted session restoring the prior task context.</td>
-                <td class="text-left" rowspan="1" colspan="1">Transport</td>
+                <td class="text-left" rowspan="1" colspan="1">The protocol is required to support persistent dialog identifiers that survive network interruption or change, and is required to define a dialog resumption message by which an agent re-attaches to an interrupted dialog, restoring the prior dialog context.</td>
+                <td class="text-left" rowspan="1" colspan="1">Dialog</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">B1-7</td>
+                <td class="text-left" rowspan="1" colspan="1">On resumption, the protocol is required to enable the receiving participant to verify that the party resuming the dialog is the participant whose exchange was interrupted, and that the dialog has not been terminated or its authorization revoked. If either check fails, the dialog is not resumed and the failure is signaled.</td>
+                <td class="text-left" rowspan="1" colspan="1">Dialog, Security</td>
               </tr>
             </tbody>
           </table>
@@ -1911,7 +1963,7 @@ and introduces additional requirements specific to multi-hop delegation chains.<
               <tr>
                 <td class="text-left" rowspan="1" colspan="1">B3-9</td>
                 <td class="text-left" rowspan="1" colspan="1">The protocol is required to allow a delegating agent to detect that a delegated agent has become unavailable and to halt the affected in-flight subtask.</td>
-                <td class="text-left" rowspan="1" colspan="1">Transport</td>
+                <td class="text-left" rowspan="1" colspan="1">Dialog</td>
               </tr>
               <tr>
                 <td class="text-left" rowspan="1" colspan="1">B3-10</td>
@@ -1928,8 +1980,16 @@ and introduces additional requirements specific to multi-hop delegation chains.<
                 <td class="text-left" rowspan="1" colspan="1">The protocol is required to enable a receiving party to determine that the authority conveyed to it does not exceed the authority conveyed to the hop it received from.</td>
                 <td class="text-left" rowspan="1" colspan="1">Authentication, Security</td>
               </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">B3-13</td>
+                <td class="text-left" rowspan="1" colspan="1">The protocol is required to enable a participant to associate each downstream interaction with the upstream interaction that caused it, so that cancellation, failure, and resumption can be propagated along the delegation chain.</td>
+                <td class="text-left" rowspan="1" colspan="1">Dialog</td>
+              </tr>
             </tbody>
           </table>
+<p id="section-4.4.3-3">Requirements B3-5 to B3-8 concern discovery, which is
+outside the scope of the dialog management protocol and is expected to
+be addressed in coordination with the INT and OPS areas.<a href="#section-4.4.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1996,20 +2056,13 @@ requirements defined in <a href="#peer-collaborative" class="auto internal xref"
 </div>
 </section>
 </div>
-<div id="protocol-requirements">
+<div id="b4-protocol-requirements">
 <section id="section-4.5.3">
-          <h4 id="name-protocol-requirements-3">
-<a href="#section-4.5.3" class="section-number selfRef">4.5.3. </a><a href="#name-protocol-requirements-3" class="section-name selfRef">Protocol Requirements</a>
+          <h4 id="name-additional-protocol-requireme">
+<a href="#section-4.5.3" class="section-number selfRef">4.5.3. </a><a href="#name-additional-protocol-requireme" class="section-name selfRef">Additional Protocol Requirements</a>
           </h4>
 <p id="section-4.5.3-1">This use case builds on the requirements defined for <a href="#orchestrator-agent" class="auto internal xref">Section 4.2</a>
 and introduces additional requirements specific to group message delivery.<a href="#section-4.5.3-1" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="b4-protocol-requirements">
-<section id="section-4.5.4">
-          <h4 id="name-additional-protocol-requireme">
-<a href="#section-4.5.4" class="section-number selfRef">4.5.4. </a><a href="#name-additional-protocol-requireme" class="section-name selfRef">Additional Protocol Requirements</a>
-          </h4>
 <table class="center" id="table-6">
             <caption><a href="#table-6" class="selfRef">Table 6</a></caption>
 <thead>
@@ -2113,6 +2166,16 @@ in <span>[<a href="#MCP" class="cite xref">MCP</a>]</span> and the agent routing
                 <td class="text-left" rowspan="1" colspan="1">The protocol is required to define error response types for request validation failure (rejected due to potential unintended or irreversible side effects) and protocol translation failure (rejected on unsuccessful translation of a request or response between supported protocols), distinct from authorization failure.</td>
                 <td class="text-left" rowspan="1" colspan="1">Transport, Security</td>
               </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">B5-2</td>
+                <td class="text-left" rowspan="1" colspan="1">The protocol is required to support continuation of a dialog through a different mediator when the mediator in use fails.</td>
+                <td class="text-left" rowspan="1" colspan="1">Dialog</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">B5-3</td>
+                <td class="text-left" rowspan="1" colspan="1">The protocol is required to enable a mediator that translates between agent communication protocols to carry the dialog context across the translation, so that participants on each side can correlate the dialog.</td>
+                <td class="text-left" rowspan="1" colspan="1">Dialog</td>
+              </tr>
             </tbody>
           </table>
 </section>
@@ -2126,7 +2189,7 @@ in <span>[<a href="#MCP" class="cite xref">MCP</a>]</span> and the agent routing
       <h2 id="name-relationship-to-oauth-and-w">
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-relationship-to-oauth-and-w" class="section-name selfRef">Relationship to OAuth and WIMSE Work</a>
       </h2>
-<p id="section-5-1">Several requirements in this document concern authorization, delegation, and agent identity (CMN-4, CMN-8, CMN-9, CMN-10, B2-2 to B2-6, B3-1 to B3-4, B3-10, B3-11, B3-12). These are expected to be addressed in the OAuth and WIMSE Working Groups.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-1">Several requirements in this document concern authorization, delegation, and agent identity (CMN-4, CMN-8, CMN-9, CMN-10, B1-7, B2-2 to B2-6, B3-1 to B3-4, B3-10, B3-11, B3-12). These are expected to be addressed in the OAuth and WIMSE Working Groups.<a href="#section-5-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="accountability-auditing">
@@ -2137,7 +2200,9 @@ in <span>[<a href="#MCP" class="cite xref">MCP</a>]</span> and the agent routing
 <p id="section-6-1">Accountability and auditing of agent actions are out of scope for this
 document. Audit and provenance representation is addressed by existing work,
 including W3C provenance (PROV) and Trace Context, and by the proposed IETF
-AUDIT (Agent Use of Delegation and Interaction Traceability) BOF.<a href="#section-6-1" class="pilcrow">¶</a></p>
+AUDIT (Agent Use of Delegation and Interaction Traceability) BOF. Dialog
+identifiers can be used to correlate audit records across the participants in
+a dialog.<a href="#section-6-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="security">
@@ -2150,7 +2215,7 @@ the Identity, Authentication, and Delegation requirements defined
 for each use case.<a href="#section-7-1" class="pilcrow">¶</a></p>
 <p id="section-7-2">Agent identity information is considered to be sensitive, particularly
 in multi-domain deployments. Use of persistent identifiers across
-sessions and domains can enable tracking and correlation of agent
+dialogs and domains can enable tracking and correlation of agent
 activity. Protocol designers need to consider mechanisms such as
 pseudonymous or temporary identifiers to reduce linkability,
 while preserving the ability to audit and enforce accountability
@@ -2208,7 +2273,7 @@ revocation, since it may be a transient failure rather than compromise.<a href="
 <dd class="break"></dd>
 <dt id="ROSENBERG">[ROSENBERG]</dt>
       <dd>
-<span class="refTitle">"Framework, Use Cases and Requirements for AI Agent Protocols"</span>, <span>n.d.</span>, <span>&lt;<a href="https://datatracker.ietf.org/doc/draft-rosenberg-aiproto-framework">https://datatracker.ietf.org/doc/draft-rosenberg-aiproto-framework</a>&gt;</span>. </dd>
+<span class="refTitle">"Framework, Use Cases and Requirements for AI Agent Protocols"</span>, <span>n.d.</span>, <span>&lt;<a href="https://datatracker.ietf.org/doc/draft-rosenberg-agentproto-usecases">https://datatracker.ietf.org/doc/draft-rosenberg-agentproto-usecases</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="SCRM">[SCRM]</dt>
       <dd>
