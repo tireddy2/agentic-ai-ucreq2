@@ -462,7 +462,7 @@ and introduces additional requirements specific to multi-hop delegation chains.
 | B3-10 | The protocol is required to provide a verifiable provenance record of a request and its response as they traverse the delegation chain, attributing each transformation to the hop that performed it, such that removal of a hop, or a modification not attributable to a signing hop, is detectable. | Authentication, Security |
 | B3-11 | The protocol is required to enable a receiving party to detect and reject a delegation chain that contains a cycle, such as a chain in which the receiving party's own identifier already appears. | Authentication, Security |
 | B3-12 | The protocol is required to enable a receiving party to determine that the authority conveyed to it does not exceed the authority conveyed to the hop it received from. | Authentication, Security |
-| B3-13 | The protocol is required to enable a participant to associate each downstream interaction with the upstream interaction that caused it, so that cancellation, failure, and resumption can be propagated along the delegation chain. | Dialog |
+| B3-13 | The protocol is required to propagate the dialog context across each hop of a delegation chain, so that participants can correlate interactions along the chain. | Dialog |
 
 Requirements B3-5 to B3-8 concern discovery, which is
 outside the scope of the dialog management protocol and is expected to
@@ -599,10 +599,10 @@ Several requirements in this document concern authorization, delegation, and age
 
 Accountability and auditing of agent actions are out of scope for this
 document. Audit and provenance representation is addressed by existing work,
-including W3C provenance (PROV) and Trace Context, and by the proposed IETF
-AUDIT (Agent Use of Delegation and Interaction Traceability) BOF. Dialog
-identifiers can be used to correlate audit records across the participants in
-a dialog.
+including W3C provenance (PROV) and Trace Context. Dialog identifiers can be
+used to correlate audit records across the participants in a dialog.
+
+Editor's note: Add a reference to IETF audit work once it progresses.
 
 # Security Considerations {#security}
 
