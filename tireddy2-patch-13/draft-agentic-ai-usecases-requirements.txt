@@ -5,9 +5,9 @@
 Network Working Group                                           T. Reddy
 Internet-Draft                                                 Z. Sarker
 Intended status: Informational                                     Nokia
-Expires: 11 April 2027                                            K. Yao
+Expires: 12 April 2027                                            K. Yao
                                                             China Mobile
-                                                          8 October 2026
+                                                          9 October 2026
 
 
                  Agentic AI Use Cases and Requirements
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 11 April 2027.
+   This Internet-Draft will expire on 12 April 2027.
 
 Copyright Notice
 
@@ -327,7 +327,7 @@ Table of Contents
    establish, modify, resume, or terminate a dialog are delivered
    reliably and in order.  Data for real-time modalities, such as
    interactive audio and video, can be delivered without reliability or
-   ordering to meet latency requirements.  All delivery is assumed to be
+   ordering to meet latency requirements.  All the deliveries are
    congestion controlled.  Whether these share a transport connection is
    determined by the transport bindings.
 
