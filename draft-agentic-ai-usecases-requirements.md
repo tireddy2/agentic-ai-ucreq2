@@ -1,7 +1,7 @@
 ---
 title: "Agentic AI Use Cases and Requirements"
 abbrev: "agentic-ai-ucreq"
-docname: draft-agentic-ai-usecases-requirements-latest-00
+docname: draft-agentic-ai-usecases-requirements-latest
 category: info
 ipr: trust200902
 submissiontype: IETF
@@ -47,7 +47,7 @@ informative:
 
   ROSENBERG:
     title: "Framework, Use Cases and Requirements for AI Agent Protocols"
-    target: https://datatracker.ietf.org/doc/draft-rosenberg-aiproto-framework
+    target: https://datatracker.ietf.org/doc/draft-rosenberg-agentproto-usecases
 
   YAO:
     title: "Problem Space Analysis of AI Agent Protocols in IETF"
@@ -79,7 +79,7 @@ This document describes use cases for agentic AI communication systems
 and derives protocol requirements from those use cases. The requirements
 are intended to guide IETF standardization work on protocols in the
 context of agent-to-agent communication, agent-to-tool communication,
-with focus on multimodal communication, session management, discovery,
+with focus on dialog management, transport, multimodal communication,
 communication security, agent identity and authentication.
 
 --- middle
@@ -98,7 +98,8 @@ reasoning over its goals and context.
 This document presents use cases that illustrate the key interaction
 patterns of agentic AI communication systems, and derives protocol
 requirements from those use cases. The requirements are intended to
-drive development of protocols and a protocol framework for agentic AI systems.
+drive development of the agentic dialog management protocol, its
+transport bindings, and the reference architecture for agentic AI systems.
 
 Each use case contributes a distinct slice of requirements, and it is their
 composition that distinguishes an agentic communication protocol from ordinary
@@ -136,9 +137,6 @@ between an agent and a tool.
 **Capability**: A description of what an agent can
 perform, including inputs, outputs, constraints, and required conditions.
 
-**Context**: The set of data, state, and history shared between agents
-to enable task execution and coordination.
-
 **Coordinator Agent**: An agent that distributes a shared problem or task
 to a group of peer agents, aggregates their outputs, and iteratively drives
 them toward a collective result or consensus.
@@ -159,7 +157,7 @@ containing structured data such as a task request, response, progress
 update, event notification, or control signal.
 
 **Modality**: A category of data format used for input or output in
-agent communication, such as text, audio, image, or video. A session
+agent communication, such as text, audio, image, or video. A dialog
 may support one or more modalities simultaneously.
 
 **Orchestrator Agent**: An agent that acts as a controller,
@@ -169,10 +167,18 @@ sub-tasks and delegating those sub-tasks to appropriate agents.
 **Peer Agent**: An agent that receives delegated subtasks from another
 agent and may itself delegate further to other agents.
 
-**Session**: A logical communication exchange shared between two or more
-agents over a period of time, which may persist across multiple
-individual message exchanges and network connections. A session can carry
-and maintain one or more contexts shared between agents.
+**Dialog**: The correlated sequence of interactions between two or
+more participants (users, agents, and tools) over the course of a task. A
+dialog may persist across multiple individual message exchanges and network
+connections.
+
+**Dialog Context**: The identifiers and lifecycle state needed to
+correlate and maintain a dialog. It does not include the content exchanged
+with AI models, such as conversation memory, retrieved documents, or prompts.
+
+**Task Context**: The data that a participant maintains
+to execute a task, such as conversation history and intermediate
+results. Task context is not carried by the protocol.
 
 **Task**: A unit of work submitted by a user to an agent, or
 delegated by one agent to another.
@@ -187,6 +193,18 @@ in agent-to-agent communication.
 **User**: A human that initiates interaction with an
 AI agent by submitting a request or task.
 
+## Dialog Context and Task Context {#dialog-task-context}
+
+Any participant, including an intermediary, can use
+dialog context to correlate and maintain a dialog without interpreting
+the task. For example, if the transport connection between two agents
+is interrupted, the dialog identifier allows the reconnecting agent to
+re-associate with the existing dialog instead of starting a new dialog
+and restarting the task. An intermediary uses the dialog identifier to
+correlate the requests it receives with the requests it forwards.
+Neither function requires access to the task context. Each participant
+can use the dialog identifier to retrieve its own task context.
+
 # Common Protocol Requirements {#common-requirements}
 
 The following baseline requirements apply to both agent-to-agent and agent-to-tool protocol interactions across all use cases and are not repeated per use case.
@@ -194,7 +212,8 @@ The following baseline requirements apply to both agent-to-agent and agent-to-to
 Each per-use-case requirement is tagged with one or more of the following protocol area tags to allow cross-use-case navigation:
 
 - **Discovery**: Requirements related to locating, advertising, or selecting agents, tools, or capabilities.
-- **Transport**: Requirements related to message delivery, streaming, cancellation, session management, and data transfer.
+- **Dialog**: Requirements related to dialog correlation, lifecycle, continuity, and recovery.
+- **Transport**: Requirements related to message delivery, streaming, cancellation, and data transfer.
 - **Security**: Requirements related to confidentiality, integrity, and authorization.
 - **Authentication**: Requirements related to identity verification and credential delegation.
 
@@ -210,10 +229,17 @@ Each per-use-case requirement is tagged with one or more of the following protoc
 | CMN-8  | The protocol is required to provide a means to verify the agent authentication credentials validity used by agents at the time of use. | Authentication |
 | CMN-9 | The protocol is required to support signaling that a presented credential has been revoked or is otherwise invalid. | Security |
 | CMN-10 | The protocol is required to support revoking a previously granted authorization, including propagating the revocation across a delegation chain so that affected agents cease to act under it. | Security |
+| CMN-11 | The protocol is required to support establishment, modification, and termination of a dialog, distinct from cancellation of a delegated subtask within the dialog. Modification includes changes to the participants, modalities, or lifetime of the dialog. The protocol is required to support a dialog lifetime, after which the dialog is terminated. | Dialog |
 
 ## Network-Layer Assumptions {#network-assumptions}
 
-The requirements in this document assume an underlying transport that provides reliable, ordered, and congestion-controlled delivery.
+The requirements in this document assume that messages
+that establish, modify, resume, or terminate a dialog are delivered
+reliably and in order. Data for real-time modalities, such as
+interactive audio and video, can be delivered without reliability or
+ordering to meet latency requirements. All the deliveries are
+congestion controlled. Whether these share a transport connection is
+determined by the transport bindings.
 
 # Use Cases {#usecases}
 
@@ -222,10 +248,14 @@ several respects, one being runtime selection of agents and tools by capability.
 An agent's internal processing, including perception, planning and
 re-planning, and invocation of its AI model, is not visible on the protocol
 interface and is out of scope; it motivates the use cases but drives no
-protocol requirement. Cross-domain operation can apply to any of these use
-cases; crossing an administrative boundary adds no new protocol requirement
-beyond authentication and authorization, which map to the OAuth and WIMSE work
-discussed in {{relationship-oauth-wimse}}.
+protocol requirement. Cross-domain operation can apply to any of
+these use cases. Crossing an administrative boundary adds authentication and
+authorization requirements, which map to the OAuth and WIMSE work discussed in
+{{relationship-oauth-wimse}}, and privacy requirements on dialog context
+propagated across the boundary, discussed in {{security}}. The use
+cases are independent of deployment model: they apply whether participants are
+within a single administrative domain or span several, and whether they
+interact directly or through intermediaries.
 
 ## Simple Single-Agent Task {#simple-single-agent}
 
@@ -237,7 +267,7 @@ results to the user. The tools invoked by the agent may reside in
 the same or a different administrative domain. The agent protocol
 is required to support multiple input and output modalities, and
 the client application and agent are required to be able to negotiate which
-modalities are active for the session.
+modalities are active for the dialog.
 
 This use case covers the protocol interface between the client
 application and the agent. The interaction between the user and
@@ -277,11 +307,12 @@ interface each applies to.
 | A1-2  | The protocol is required to define a task cancellation message that the client can issue at any point during task execution. | App/Agent-to-Agent | Transport |
 | A1-3  | The protocol is required to define structured error message types that distinguish at minimum: transport failure, tool invocation failure, and agent processing failure. | Both | Transport |
 | A1-4  | The protocol is required to support multiple modalities for both input and output. | App/Agent-to-Agent | Transport |
-| A1-5  | The protocol is required to support modality negotiation at session setup, allowing the client and agent to agree on which modalities are active for the session. | App/Agent-to-Agent | Discovery, Transport |
+| A1-5  | The protocol is required to support modality negotiation at dialog establishment, allowing the client and agent to agree on which modalities are active for the dialog. | App/Agent-to-Agent | Discovery, Transport |
 | A1-6  | The protocol is required to support agent-initiated notifications to the client during task execution. | App/Agent-to-Agent | Transport |
 | A1-7  | The protocol is required to support concurrent invocation of multiple tools within a single agent task, where tools may be operated by distinct providers across different administrative domains, each with independent authentication and authorization requirements. | Agent-to-Tool | Discovery, Transport, Security |
 | A1-8  | The protocol is required to support bulk transfer of large data between communicating parties, applicable to both agent-to-tool and agent-to-agent interactions. | Both | Transport |
 | A1-9 | A delegation mechanism is required to be defined by which an agent presents to a tool provider a credential attesting the authorization for the requested tool access, without exposing the client's primary credentials. | Agent-to-Tool | Authentication |
+| A1-10 | The protocol is required to preserve the dialog context when a participant transforms data from one modality to another, such as audio to text. | App/Agent-to-Agent | Dialog |
 
 ## Orchestrator and Agent Collaboration {#orchestrator-agent}
 
@@ -299,10 +330,10 @@ call processes only what is explicitly provided with a particular context,
 with no persistent memory between calls. The application
 layer is responsible for maintaining the context across the calls by
 carrying conversation history, intermediate results, and task
-state. Session continuity is therefore required to preserve this
-accumulated context across network interruptions, ensuring that a
-reconnecting agent can restore the prior task context without
-having to reconstruct it from scratch.
+state. Dialog continuity is therefore required to preserve the
+dialog context across network interruptions, so that a reconnecting
+agent can re-associate with the dialog and use it to restore its own
+task context without reconstructing it from scratch.
 
 This pattern is described in [ROSENBERG] and reflected in [A2A],
 and is implemented in deployed multi-agent frameworks including
@@ -331,7 +362,8 @@ and is implemented in deployed multi-agent frameworks including
 | B1-3  | The protocol is required to define a result reporting message by which an agent returns its completed output to the orchestrator. | Transport |
 | B1-4  | The protocol is required to support streaming of intermediate results from the agent to the orchestrator during task execution. | Transport |
 | B1-5  | The protocol is required to define a task cancellation message that the orchestrator can send to an agent to abort a delegated subtask. | Transport |
-| B1-6  | The protocol is required to support persistent session identifiers that survive network interruption, and is required to define a session resumption message by which an agent re-attaches to an interrupted session restoring the prior task context. | Transport |
+| B1-6  | The protocol is required to support persistent dialog identifiers that survive network interruption or change, and is required to define a dialog resumption message by which an agent re-attaches to an interrupted dialog, restoring the prior dialog context. | Dialog |
+| B1-7  | On resumption, the protocol is required to enable the receiving participant to verify that the party resuming the dialog is the participant whose exchange was interrupted, and that the dialog has not been terminated or its authorization revoked. If either check fails, the dialog is not resumed and the failure is signaled. | Dialog, Security |
 
 ## Long-Running Delegated Task with Authorization Checkpoint {#authz-checkpoint}
 
@@ -426,10 +458,15 @@ and introduces additional requirements specific to multi-hop delegation chains.
 | B3-6  | The protocol is required to define a capability discovery mechanism by which agents can query a discovery service or registry to discover and select appropriate peer agents at runtime without requiring prior peer-specific configuration. | Discovery |
 | B3-7  | The protocol is required to define an agent identifier format that uniquely represents an agent identity and is resolvable to the agent's communication endpoint using an appropriate discovery mechanism. | Discovery |
 | B3-8  | The protocol is required to ensure that advertised capabilities are integrity-protected, such that a discovering agent can verify they have not been tampered with. | Discovery, Security |
-| B3-9 | The protocol is required to allow a delegating agent to detect that a delegated agent has become unavailable and to halt the affected in-flight subtask. | Transport |
+| B3-9 | The protocol is required to allow a delegating agent to detect that a delegated agent has become unavailable and to halt the affected in-flight subtask. | Dialog, Transport |
 | B3-10 | The protocol is required to provide a verifiable provenance record of a request and its response as they traverse the delegation chain, attributing each transformation to the hop that performed it, such that removal of a hop, or a modification not attributable to a signing hop, is detectable. | Authentication, Security |
 | B3-11 | The protocol is required to enable a receiving party to detect and reject a delegation chain that contains a cycle, such as a chain in which the receiving party's own identifier already appears. | Authentication, Security |
 | B3-12 | The protocol is required to enable a receiving party to determine that the authority conveyed to it does not exceed the authority conveyed to the hop it received from. | Authentication, Security |
+| B3-13 | The protocol is required to propagate the dialog context across each hop of a delegation chain, so that participants can correlate interactions along the chain. | Dialog |
+
+Requirements B3-5 to B3-8 concern discovery, which is
+outside the scope of the dialog management protocol and is expected to
+be addressed in coordination with the INT and OPS areas.
 
 ## Cooperative Reasoning and Consensus Formation {#cooperative-reasoning}
 
@@ -482,12 +519,10 @@ The direct agent-to-agent topology:
                |___________________________|
 ~~~
 
-### Protocol Requirements
+### Additional Protocol Requirements {#b4-protocol-requirements}
 
 This use case builds on the requirements defined for {{orchestrator-agent}}
 and introduces additional requirements specific to group message delivery.
-
-### Additional Protocol Requirements {#b4-protocol-requirements}
 
 | REQ-ID | Description | Tag |
 |--------|-------------|-----|
@@ -552,18 +587,22 @@ in [MCP] and the agent routing patterns discussed in [A2A].
 | REQ-ID | Description | Tag |
 |--------|-------------|-----|
 | B5-1  | The protocol is required to define error response types for request validation failure (rejected due to potential unintended or irreversible side effects) and protocol translation failure (rejected on unsuccessful translation of a request or response between supported protocols), distinct from authorization failure. | Transport, Security |
+| B5-2  | The protocol is required to support continuation of a dialog through a different mediator when the mediator in use fails. | Dialog |
+| B5-3  | The protocol is required to enable a mediator that translates between agent communication protocols to carry the dialog context across the translation, so that participants on each side can correlate the dialog. | Dialog |
 
 # Relationship to OAuth and WIMSE Work {#relationship-oauth-wimse}
 
-Several requirements in this document concern authorization, delegation, and agent identity (CMN-4, CMN-8, CMN-9, CMN-10, B2-2 to B2-6, B3-1 to B3-4, B3-10, B3-11, B3-12). These are expected to be addressed in the OAuth and WIMSE Working Groups.
+Several requirements in this document concern authorization, delegation, and agent identity (CMN-4, CMN-8, CMN-9, CMN-10, B1-7, B2-2 to B2-6, B3-1 to B3-4, B3-10, B3-11, B3-12). These are expected to be addressed in the OAuth and WIMSE Working Groups.
 
 
 # Accountability and Auditing {#accountability-auditing}
 
 Accountability and auditing of agent actions are out of scope for this
 document. Audit and provenance representation is addressed by existing work,
-including W3C provenance (PROV) and Trace Context, and by the proposed IETF
-AUDIT (Agent Use of Delegation and Interaction Traceability) BOF.
+including W3C provenance (PROV) and Trace Context. Dialog identifiers can be
+used to correlate audit records across the participants in a dialog.
+
+Editor's note: Add a reference to IETF audit work once it progresses.
 
 # Security Considerations {#security}
 
@@ -573,7 +612,7 @@ for each use case.
 
 Agent identity information is considered to be sensitive, particularly
 in multi-domain deployments. Use of persistent identifiers across
-sessions and domains can enable tracking and correlation of agent
+dialogs and domains can enable tracking and correlation of agent
 activity. Protocol designers need to consider mechanisms such as
 pseudonymous or temporary identifiers to reduce linkability,
 while preserving the ability to audit and enforce accountability
