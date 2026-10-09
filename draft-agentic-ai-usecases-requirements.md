@@ -237,7 +237,7 @@ The requirements in this document assume that messages
 that establish, modify, resume, or terminate a dialog are delivered
 reliably and in order. Data for real-time modalities, such as
 interactive audio and video, can be delivered without reliability or
-ordering to meet latency requirements. All delivery is assumed to be
+ordering to meet latency requirements. All the deliveries are
 congestion controlled. Whether these share a transport connection is
 determined by the transport bindings.
 
