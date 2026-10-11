@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-09-01T03:07:59.934461+00:00",
+  "timestamp": "2026-10-11T03:28:52.463986+00:00",
   "repo": "tireddy2/agentic-ai-ucreq2",
   "labels": [
     {
@@ -4049,6 +4049,168 @@
               "updatedAt": "2026-08-20T06:51:05Z"
             }
           ]
+        }
+      ]
+    },
+    {
+      "number": 72,
+      "id": "PR_kwDOSIVa8M8AAAABHSlhYw",
+      "title": "Updated draft to align with charter",
+      "url": "https://github.com/tireddy2/agentic-ai-ucreq2/pull/72",
+      "state": "MERGED",
+      "author": "tireddy2",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-10-08T08:46:51Z",
+      "updatedAt": "2026-10-09T12:32:46Z",
+      "baseRepository": "tireddy2/agentic-ai-ucreq2",
+      "baseRefName": "main",
+      "baseRefOid": "2949be320088b851429780543a389d58bf2665e4",
+      "headRepository": "tireddy2/agentic-ai-ucreq2",
+      "headRefName": "tireddy2-patch-13",
+      "headRefOid": "a58e8d6b7ff3bd784b8c8ebb53affa25c9ed9b81",
+      "closedAt": "2026-10-09T12:32:46Z",
+      "mergedAt": "2026-10-09T12:32:46Z",
+      "mergedBy": "tireddy2",
+      "mergeCommit": {
+        "oid": "f9920d8066aef956cffc84a2007687c1bea0bca1"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOSIVa8M8AAAABRRulMw",
+          "commit": {
+            "abbreviatedOid": "29561c9"
+          },
+          "author": "zaheduzzaman",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-10-08T09:20:52Z",
+          "updatedAt": "2026-10-08T09:20:52Z",
+          "comments": [
+            {
+              "originalPosition": 199,
+              "body": "```suggestion\n| B3-9 | The protocol is required to allow a delegating agent to detect that a delegated agent has become unavailable and to halt the affected in-flight subtask. | Dialog, Transport |\n```",
+              "createdAt": "2026-10-08T09:20:52Z",
+              "updatedAt": "2026-10-08T09:20:52Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOSIVa8M8AAAABRRvtTQ",
+          "commit": {
+            "abbreviatedOid": "29561c9"
+          },
+          "author": "zaheduzzaman",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-10-08T09:22:38Z",
+          "updatedAt": "2026-10-08T09:22:38Z",
+          "comments": [
+            {
+              "originalPosition": 203,
+              "body": "I am not sure this need to be in the protocol. if the context has identifiers then the participant can maintain the mapping of upstream and downstream interaction already. What else is expected from the protocol? ",
+              "createdAt": "2026-10-08T09:22:38Z",
+              "updatedAt": "2026-10-08T09:22:38Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOSIVa8M8AAAABRRwpVA",
+          "commit": {
+            "abbreviatedOid": "29561c9"
+          },
+          "author": "zaheduzzaman",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-10-08T09:24:06Z",
+          "updatedAt": "2026-10-08T09:24:06Z",
+          "comments": [
+            {
+              "originalPosition": 245,
+              "body": "We don't need to refer to AUDIT now.. we can add an editor's note to remember to add it later.",
+              "createdAt": "2026-10-08T09:24:06Z",
+              "updatedAt": "2026-10-08T09:24:06Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOSIVa8M8AAAABRSUX-Q",
+          "commit": {
+            "abbreviatedOid": "29561c9"
+          },
+          "author": "tireddy2",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-10-08T10:13:10Z",
+          "updatedAt": "2026-10-08T10:13:10Z",
+          "comments": [
+            {
+              "originalPosition": 245,
+              "body": "Yes, I will add a editor note. ",
+              "createdAt": "2026-10-08T10:13:10Z",
+              "updatedAt": "2026-10-08T10:13:10Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOSIVa8M8AAAABRSVdDQ",
+          "commit": {
+            "abbreviatedOid": "29561c9"
+          },
+          "author": "tireddy2",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-10-08T10:14:52Z",
+          "updatedAt": "2026-10-08T10:14:53Z",
+          "comments": [
+            {
+              "originalPosition": 203,
+              "body": "The protocol is required to propagate the dialog context across hops. I will modify it as: \r\n\r\n| B3-13 | The protocol is required to propagate the dialog context\r\nacross each hop of a delegation chain, so that participants can\r\ncorrelate interactions along the chain. | Dialog |",
+              "createdAt": "2026-10-08T10:14:53Z",
+              "updatedAt": "2026-10-08T10:14:53Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOSIVa8M8AAAABRgQPOw",
+          "commit": {
+            "abbreviatedOid": "3c7406a"
+          },
+          "author": "zaheduzzaman",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-10-09T11:51:28Z",
+          "updatedAt": "2026-10-09T11:51:28Z",
+          "comments": [
+            {
+              "originalPosition": 121,
+              "body": "```suggestion\nordering to meet latency requirements. All the deliveries are\n```",
+              "createdAt": "2026-10-09T11:51:28Z",
+              "updatedAt": "2026-10-09T11:51:28Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOSIVa8M8AAAABRgRCag",
+          "commit": {
+            "abbreviatedOid": "3c7406a"
+          },
+          "author": "zaheduzzaman",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-10-09T11:52:24Z",
+          "updatedAt": "2026-10-09T11:52:24Z",
+          "comments": []
         }
       ]
     }
