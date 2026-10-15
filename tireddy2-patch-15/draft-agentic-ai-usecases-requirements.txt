@@ -605,7 +605,8 @@ Table of Contents
      |        | and the protocol is required to signal  |           |
      |        | the reason.  The receiving participant  |           |
      |        | is required to be able to determine     |           |
-     |        | which of the two cases occurred.        |           |
+     |        | whether the check failed or could not   |           |
+     |        | be completed.                           |           |
      +--------+-----------------------------------------+-----------+
 
                                  Table 3
