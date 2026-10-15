@@ -1052,7 +1052,7 @@ svg {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Reddy, et al.</td>
-<td class="center">Expires 12 April 2027</td>
+<td class="center">Expires 18 April 2027</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1065,12 +1065,12 @@ svg {
 <dd class="internet-draft">draft-agentic-ai-usecases-requirements-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-10-09" class="published">9 October 2026</time>
+<time datetime="2026-10-15" class="published">15 October 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2027-04-12">12 April 2027</time></dd>
+<dd class="expires"><time datetime="2027-04-18">18 April 2027</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1125,7 +1125,7 @@ communication security, agent identity and authentication.<a href="#section-abst
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 12 April 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 18 April 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1487,6 +1487,11 @@ can use the dialog identifier to retrieve its own task context.<a href="#section
             <td class="text-left" rowspan="1" colspan="1">The protocol is required to support establishment, modification, and termination of a dialog, distinct from cancellation of a delegated subtask within the dialog. Modification includes changes to the participants, modalities, or lifetime of the dialog. The protocol is required to support a dialog lifetime, after which the dialog is terminated.</td>
             <td class="text-left" rowspan="1" colspan="1">Dialog</td>
           </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">CMN-12</td>
+            <td class="text-left" rowspan="1" colspan="1">Before accepting a change to a dialog, a participant is required to be able to verify that the change is authorized at that time. If it cannot verify this, it is required to reject the change and signal the reason.</td>
+            <td class="text-left" rowspan="1" colspan="1">Dialog, Security</td>
+          </tr>
         </tbody>
       </table>
 <div id="network-assumptions">
@@ -1682,9 +1687,16 @@ state. Dialog continuity is therefore required to preserve the
 dialog context across network interruptions, so that a reconnecting
 agent can re-associate with the dialog and use it to restore its own
 task context without reconstructing it from scratch.<a href="#section-4.2.1-2" class="pilcrow">¶</a></p>
-<p id="section-4.2.1-3">This pattern is described in <span>[<a href="#ROSENBERG" class="cite xref">ROSENBERG</a>]</span> and reflected in <span>[<a href="#A2A" class="cite xref">A2A</a>]</span>,
+<p id="section-4.2.1-3">If a dialog is interrupted before the result of an operation reaches
+the delegating agent, the operation may or may not have completed.
+Resuming the dialog does not tell the delegating agent which. Before
+resending the operation, the delegating agent checks its outcome with
+the delegated agent or tool that performed it. If the outcome cannot be
+determined, the operation remains unresolved, and resuming the dialog
+alone does not justify resending it.<a href="#section-4.2.1-3" class="pilcrow">¶</a></p>
+<p id="section-4.2.1-4">This pattern is described in <span>[<a href="#ROSENBERG" class="cite xref">ROSENBERG</a>]</span> and reflected in <span>[<a href="#A2A" class="cite xref">A2A</a>]</span>,
 and is implemented in deployed multi-agent frameworks including
-<span>[<a href="#AUTOGEN" class="cite xref">AUTOGEN</a>]</span>, <span>[<a href="#LANGCHAIN" class="cite xref">LANGCHAIN</a>]</span>, and <span>[<a href="#OPENAI-AGENTS" class="cite xref">OPENAI-AGENTS</a>]</span>.<a href="#section-4.2.1-3" class="pilcrow">¶</a></p>
+<span>[<a href="#AUTOGEN" class="cite xref">AUTOGEN</a>]</span>, <span>[<a href="#LANGCHAIN" class="cite xref">LANGCHAIN</a>]</span>, and <span>[<a href="#OPENAI-AGENTS" class="cite xref">OPENAI-AGENTS</a>]</span>.<a href="#section-4.2.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="interaction-flow-1">
@@ -1754,7 +1766,12 @@ and is implemented in deployed multi-agent frameworks including
               </tr>
               <tr>
                 <td class="text-left" rowspan="1" colspan="1">B1-7</td>
-                <td class="text-left" rowspan="1" colspan="1">On resumption, the protocol is required to enable the receiving participant to verify that the party resuming the dialog is the participant whose exchange was interrupted, and that the dialog has not been terminated or its authorization revoked. If either check fails, the dialog is not resumed and the failure is signaled.</td>
+                <td class="text-left" rowspan="1" colspan="1">On resumption, the protocol is required to enable the receiving participant to verify that (1) the party resuming the dialog is the participant whose exchange was interrupted, (2) the dialog context presented is the current state of that dialog, and (3) the dialog has not been terminated and its authorization has not been revoked.</td>
+                <td class="text-left" rowspan="1" colspan="1">Dialog, Security</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">B1-8</td>
+                <td class="text-left" rowspan="1" colspan="1">If any check in B1-7 fails or cannot be completed, the dialog is not resumed and the protocol is required to signal the reason.</td>
                 <td class="text-left" rowspan="1" colspan="1">Dialog, Security</td>
               </tr>
             </tbody>
@@ -2189,7 +2206,7 @@ in <span>[<a href="#MCP" class="cite xref">MCP</a>]</span> and the agent routing
       <h2 id="name-relationship-to-oauth-and-w">
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-relationship-to-oauth-and-w" class="section-name selfRef">Relationship to OAuth and WIMSE Work</a>
       </h2>
-<p id="section-5-1">Several requirements in this document concern authorization, delegation, and agent identity (CMN-4, CMN-8, CMN-9, CMN-10, B1-7, B2-2 to B2-6, B3-1 to B3-4, B3-10, B3-11, B3-12). These are expected to be addressed in the OAuth and WIMSE Working Groups.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-1">Several requirements in this document concern authorization, delegation, and agent identity (CMN-4, CMN-8, CMN-9, CMN-10, CMN-12, B1-7, B1-8, B2-2 to B2-6, B3-1 to B3-4, B3-10, B3-11, B3-12). These are expected to be addressed in the OAuth and WIMSE Working Groups.<a href="#section-5-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="accountability-auditing">
@@ -2237,7 +2254,7 @@ revocation, since it may be a transient failure rather than compromise.<a href="
       <h2 id="name-acknowledgements">
 <a href="#name-acknowledgements" class="section-name selfRef">Acknowledgements</a>
       </h2>
-<p id="section-9-1">Thanks to Borislava Gajic, Julien Maisonneuve, Parisa Foroughi, Laurent Ciavaglia, Nathalie Romo Moreno, Peter Leis, Linda Dunbar, Mikhail Sergeev, Iman Schrock, Sumit Ahuja and Sina Khatibi for the discussions and comments.<a href="#section-9-1" class="pilcrow">¶</a></p>
+<p id="section-9-1">Thanks to Borislava Gajic, Julien Maisonneuve, Parisa Foroughi, Laurent Ciavaglia, Nathalie Romo Moreno, Peter Leis, Linda Dunbar, Mikhail Sergeev, Iman Schrock, Sumit Ahuja, Sina Khatibi, Vaishnavi Gudur, Lars Kersten Kroehl, Girish Konda, Nikhil Donapati, Nicholas Templeman and Bradley B for the discussions and comments.<a href="#section-9-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-informative-references">
