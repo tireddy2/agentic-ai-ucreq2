@@ -235,9 +235,6 @@ Table of Contents
    Each per-use-case requirement is tagged with one or more of the
    following protocol area tags to allow cross-use-case navigation:
 
-   *  *Discovery*: Requirements related to locating, advertising, or
-      selecting agents, tools, or capabilities.
-
    *  *Dialog*: Requirements related to dialog correlation, lifecycle,
       continuity, and recovery.
 
@@ -253,8 +250,8 @@ Table of Contents
    +========+========================================+================+
    | REQ-ID | Description                            | Tag            |
    +========+========================================+================+
-   | CMN-1  | The protocol is required to support    | Discovery,     |
-   |        | any client application to communicate  | Authentication |
+   | CMN-1  | The protocol is required to support    | Authentication |
+   |        | any client application to communicate  |                |
    |        | with any agent service.                |                |
    +--------+----------------------------------------+----------------+
    | CMN-2  | Mutual authentication is required      | Authentication |
@@ -321,9 +318,12 @@ Table of Contents
    | CMN-12 | Before accepting a change to a dialog, | Dialog,        |
    |        | a participant is required to be able   | Security       |
    |        | to verify that the change is           |                |
-   |        | authorized at that time.  If it cannot |                |
-   |        | verify this, it is required to reject  |                |
-   |        | the change and signal the reason.      |                |
+   |        | authorized at that time.  If this      |                |
+   |        | check fails or cannot be completed,    |                |
+   |        | the participant is required to reject  |                |
+   |        | the change and signal the reason.  It  |                |
+   |        | is required to be able to determine    |                |
+   |        | which of the two cases occurred.       |                |
    +--------+----------------------------------------+----------------+
 
                                  Table 1
@@ -437,7 +437,7 @@ Table of Contents
    |        | for both input and    |                |                |
    |        | output.               |                |                |
    +--------+-----------------------+----------------+----------------+
-   | A1-5   | The protocol is       | App/Agent-to-  | Discovery,     |
+   | A1-5   | The protocol is       | App/Agent-to-  | Dialog,        |
    |        | required to support   | Agent          | Transport      |
    |        | modality negotiation  |                |                |
    |        | at dialog             |                |                |
@@ -455,9 +455,9 @@ Table of Contents
    |        | client during task    |                |                |
    |        | execution.            |                |                |
    +--------+-----------------------+----------------+----------------+
-   | A1-7   | The protocol is       | Agent-to-Tool  | Discovery,     |
-   |        | required to support   |                | Transport,     |
-   |        | concurrent invocation |                | Security       |
+   | A1-7   | The protocol is       | Agent-to-Tool  | Transport,     |
+   |        | required to support   |                | Security       |
+   |        | concurrent invocation |                |                |
    |        | of multiple tools     |                |                |
    |        | within a single agent |                |                |
    |        | task, where tools may |                |                |
@@ -603,7 +603,10 @@ Table of Contents
      | B1-8   | If any check in B1-7 fails or cannot be | Dialog,   |
      |        | completed, the dialog is not resumed    | Security  |
      |        | and the protocol is required to signal  |           |
-     |        | the reason.                             |           |
+     |        | the reason.  The receiving participant  |           |
+     |        | is required to be able to determine     |           |
+     |        | whether the check failed or could not   |           |
+     |        | be completed.                           |           |
      +--------+-----------------------------------------+-----------+
 
                                  Table 3
@@ -774,45 +777,13 @@ Table of Contents
     |        | authorization scope of any          |                 |
     |        | intermediate agent in the chain.    |                 |
     +--------+-------------------------------------+-----------------+
-    | B3-5   | The protocol is required to define  | Registration,   |
-    |        | a capability registration mechanism | Discovery       |
-    |        | by which agents can publish         |                 |
-    |        | metadata describing their           |                 |
-    |        | capabilities, supported protocols,  |                 |
-    |        | rate limits, authentication         |                 |
-    |        | methods, authorization mechanisms,  |                 |
-    |        | and authorization scopes to a       |                 |
-    |        | discovery service or registry.      |                 |
-    +--------+-------------------------------------+-----------------+
-    | B3-6   | The protocol is required to define  | Discovery       |
-    |        | a capability discovery mechanism by |                 |
-    |        | which agents can query a discovery  |                 |
-    |        | service or registry to discover and |                 |
-    |        | select appropriate peer agents at   |                 |
-    |        | runtime without requiring prior     |                 |
-    |        | peer-specific configuration.        |                 |
-    +--------+-------------------------------------+-----------------+
-    | B3-7   | The protocol is required to define  | Discovery       |
-    |        | an agent identifier format that     |                 |
-    |        | uniquely represents an agent        |                 |
-    |        | identity and is resolvable to the   |                 |
-    |        | agent's communication endpoint      |                 |
-    |        | using an appropriate discovery      |                 |
-    |        | mechanism.                          |                 |
-    +--------+-------------------------------------+-----------------+
-    | B3-8   | The protocol is required to ensure  | Discovery,      |
-    |        | that advertised capabilities are    | Security        |
-    |        | integrity-protected, such that a    |                 |
-    |        | discovering agent can verify they   |                 |
-    |        | have not been tampered with.        |                 |
-    +--------+-------------------------------------+-----------------+
-    | B3-9   | The protocol is required to allow a | Dialog,         |
+    | B3-5   | The protocol is required to allow a | Dialog,         |
     |        | delegating agent to detect that a   | Transport       |
     |        | delegated agent has become          |                 |
     |        | unavailable and to halt the         |                 |
     |        | affected in-flight subtask.         |                 |
     +--------+-------------------------------------+-----------------+
-    | B3-10  | The protocol is required to provide | Authentication, |
+    | B3-6   | The protocol is required to provide | Authentication, |
     |        | a verifiable provenance record of a | Security        |
     |        | request and its response as they    |                 |
     |        | traverse the delegation chain,      |                 |
@@ -822,20 +793,20 @@ Table of Contents
     |        | modification not attributable to a  |                 |
     |        | signing hop, is detectable.         |                 |
     +--------+-------------------------------------+-----------------+
-    | B3-11  | The protocol is required to enable  | Authentication, |
+    | B3-7   | The protocol is required to enable  | Authentication, |
     |        | a receiving party to detect and     | Security        |
     |        | reject a delegation chain that      |                 |
     |        | contains a cycle, such as a chain   |                 |
     |        | in which the receiving party's own  |                 |
     |        | identifier already appears.         |                 |
     +--------+-------------------------------------+-----------------+
-    | B3-12  | The protocol is required to enable  | Authentication, |
+    | B3-8   | The protocol is required to enable  | Authentication, |
     |        | a receiving party to determine that | Security        |
     |        | the authority conveyed to it does   |                 |
     |        | not exceed the authority conveyed   |                 |
     |        | to the hop it received from.        |                 |
     +--------+-------------------------------------+-----------------+
-    | B3-13  | The protocol is required to         | Dialog          |
+    | B3-9   | The protocol is required to         | Dialog          |
     |        | propagate the dialog context across |                 |
     |        | each hop of a delegation chain, so  |                 |
     |        | that participants can correlate     |                 |
@@ -843,10 +814,6 @@ Table of Contents
     +--------+-------------------------------------+-----------------+
 
                                  Table 5
-
-   Requirements B3-5 to B3-8 concern discovery, which is outside the
-   scope of the dialog management protocol and is expected to be
-   addressed in coordination with the INT and OPS areas.
 
 4.5.  Cooperative Reasoning and Consensus Formation
 
@@ -999,8 +966,8 @@ Table of Contents
 
    Several requirements in this document concern authorization,
    delegation, and agent identity (CMN-4, CMN-8, CMN-9, CMN-10, CMN-12,
-   B1-7, B1-8, B2-2 to B2-6, B3-1 to B3-4, B3-10, B3-11, B3-12).  These
-   are expected to be addressed in the OAuth and WIMSE Working Groups.
+   B1-7, B1-8, B2-2 to B2-6, B3-1 to B3-4, B3-6, B3-7, B3-8).  These are
+   expected to be addressed in the OAuth and WIMSE Working Groups.
 
 6.  Accountability and Auditing
 
@@ -1028,9 +995,13 @@ Table of Contents
    accountability, and traceability need to be considered in the design
    of agent identity mechanisms.
 
-   Agent unavailability (B3-9) halts the affected subtask but does not
+   Agent unavailability (B3-5) halts the affected subtask but does not
    imply revocation, since it may be a transient failure rather than
    compromise.
+
+   Signaled error reasons help a participant decide on the right course
+   of action to address the error.  They need to be precise enough for
+   that, but not reveal information that an attacker could use.
 
 8.  IANA Considerations
 
@@ -1042,7 +1013,8 @@ Acknowledgements
    Laurent Ciavaglia, Nathalie Romo Moreno, Peter Leis, Linda Dunbar,
    Mikhail Sergeev, Iman Schrock, Sumit Ahuja, Sina Khatibi, Vaishnavi
    Gudur, Lars Kersten Kroehl, Girish Konda, Nikhil Donapati, Nicholas
-   Templeman and Bradley B for the discussions and comments.
+   Templeman, Bradley B, and Douglas Wadkins for the discussions and
+   comments.
 
 Informative References
 
