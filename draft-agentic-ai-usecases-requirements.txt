@@ -5,9 +5,9 @@
 Network Working Group                                           T. Reddy
 Internet-Draft                                                 Z. Sarker
 Intended status: Informational                                     Nokia
-Expires: 18 April 2027                                            K. Yao
+Expires: 30 April 2027                                            K. Yao
                                                             China Mobile
-                                                         15 October 2026
+                                                         27 October 2026
 
 
                  Agentic AI Use Cases and Requirements
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 18 April 2027.
+   This Internet-Draft will expire on 30 April 2027.
 
 Copyright Notice
 
@@ -72,31 +72,38 @@ Table of Contents
      4.1.  Simple Single-Agent Task
        4.1.1.  Description
        4.1.2.  Interaction Flow
-       4.1.3.  Protocol Requirements
+       4.1.3.  Example
+       4.1.4.  Protocol Requirements
      4.2.  Orchestrator and Agent Collaboration
        4.2.1.  Description
        4.2.2.  Interaction Flow
-       4.2.3.  Protocol Requirements
+       4.2.3.  Example
+       4.2.4.  Protocol Requirements
      4.3.  Long-Running Delegated Task with Authorization Checkpoint
        4.3.1.  Description
        4.3.2.  Interaction Flow
-       4.3.3.  Additional Protocol Requirements
+       4.3.3.  Example
+       4.3.4.  Additional Protocol Requirements
      4.4.  Peer Collaborative Multi-Agent Problem Solving
        4.4.1.  Description
        4.4.2.  Interaction Flow
-       4.4.3.  Additional Protocol Requirements
+       4.4.3.  Example
+       4.4.4.  Additional Protocol Requirements
      4.5.  Cooperative Reasoning and Consensus Formation
        4.5.1.  Description
        4.5.2.  Interaction Flow
-       4.5.3.  Additional Protocol Requirements
+       4.5.3.  Example
+       4.5.4.  Additional Protocol Requirements
      4.6.  Tool, Data, and API Mediation Between Agents
        4.6.1.  Description
        4.6.2.  Interaction Flow
-       4.6.3.  Additional Protocol Requirements
+       4.6.3.  Example
+       4.6.4.  Additional Protocol Requirements
    5.  Relationship to OAuth and WIMSE Work
-   6.  Accountability and Auditing
-   7.  Security Considerations
-   8.  IANA Considerations
+   6.  Existing Protocols and Gaps
+   7.  Accountability and Auditing
+   8.  Security Considerations
+   9.  IANA Considerations
    Acknowledgements
    Informative References
    Authors' Addresses
@@ -125,9 +132,8 @@ Table of Contents
 
    The use cases in this document cover interaction patterns for agentic
    AI communication systems.  This document takes into account related
-   use case and problem statement documents including [SCRM], [YAO],
-   [SONG], and [ROSENBERG], and existing protocol work including [A2A]
-   and [MCP].
+   use case and problem statement documents including [SCRM], [YAO], and
+   [SONG], and existing protocol work including [A2A] and [MCP].
 
 2.  Terminology
 
@@ -350,7 +356,7 @@ Table of Contents
    administrative boundary adds authentication and authorization
    requirements, which map to the OAuth and WIMSE work discussed in
    Section 5, and privacy requirements on dialog context propagated
-   across the boundary, discussed in Section 7.  The use cases are
+   across the boundary, discussed in Section 8.  The use cases are
    independent of deployment model: they apply whether participants are
    within a single administrative domain or span several, and whether
    they interact directly or through intermediaries.
@@ -374,7 +380,7 @@ Table of Contents
    communication between a user and an agent without an intermediary
    client application is not covered in this use case.
 
-   This interaction pattern is described in [ROSENBERG] and [SCRM].
+   This interaction pattern is described in [SCRM].
 
 4.1.2.  Interaction Flow
 
@@ -388,7 +394,42 @@ Table of Contents
                                              | Tool(s) |
                                              +---------+
 
-4.1.3.  Protocol Requirements
+4.1.3.  Example
+
+   A user books a flight through a travel booking app.  The app is the
+   client application.  It sends the user's request to a travel agent
+   run by the travel company that provides the app.  The agent uses two
+   tools: a fare search tool run by the travel company, and a booking
+   tool run by an airline, in a different administrative domain.
+
+   +------------+      +--------------+      +----------------+
+   | Travel app |<---->| Travel agent |----->| Fare search    |
+   |            |      |              |      | (travel co.)   |
+   +------------+      +--------------+      +----------------+
+                              |
+                              |              +----------------+
+                              +------------->| Flight booking |
+                                             | (airline)      |
+                                             +----------------+
+
+   1.  The app establishes a dialog with the agent and asks for a flight
+       on a given route and date (CMN-11).
+
+   2.  The agent queries the fare search tool and returns matching
+       flights to the app.
+
+   3.  The user picks a flight.  The agent calls the airline's booking
+       tool with a credential showing that the user authorized the
+       booking, without the user's airline credentials (A1-9).
+
+   4.  The agent returns the booking confirmation, and the app
+       terminates the dialog (CMN-11).
+
+   If the user abandons a search before step 3, the app cancels that
+   task (A1-2).  The dialog continues, and the user can start a new
+   search in it without starting over.
+
+4.1.4.  Protocol Requirements
 
    This use case involves two distinct protocol interfaces.  The App/
    Agent-to-Agent interface is between the party making the request,
@@ -535,9 +576,9 @@ Table of Contents
    be determined, the operation remains unresolved, and resuming the
    dialog alone does not justify resending it.
 
-   This pattern is described in [ROSENBERG] and reflected in [A2A], and
-   is implemented in deployed multi-agent frameworks including
-   [AUTOGEN], [LANGCHAIN], and [OPENAI-AGENTS].
+   This pattern is reflected in [A2A], and is implemented in deployed
+   multi-agent frameworks including [AUTOGEN], [LANGCHAIN], and
+   [OPENAI-AGENTS].
 
 4.2.2.  Interaction Flow
 
@@ -551,7 +592,43 @@ Table of Contents
    |                     |<--Result Reporting-----|            |
    +---------------------+                        +------------+
 
-4.2.3.  Protocol Requirements
+4.2.3.  Example
+
+   A user asks a trip planning agent, the orchestrator, to arrange a
+   business trip.  The orchestrator delegates the flight booking to a
+   flight agent and the hotel booking to a hotel agent.  Both agents are
+   run by different providers.
+
+   +--------------+      +--------------+
+   |              |----->| Flight agent |
+   | Trip planner |      +--------------+
+   | (orchestr.)  |
+   |              |      +--------------+
+   |              |----->| Hotel agent  |
+   +--------------+      +--------------+
+
+   1.  The orchestrator establishes a dialog with each agent and
+       delegates both subtasks without waiting for either to finish
+       (B1-1, B1-2).
+
+   2.  The flight agent streams fare options and reports the booked
+       flight (B1-4, B1-3).
+
+   3.  The orchestrator sends the hotel agent a request to book a room.
+       The hotel agent books the room, but the connection drops before
+       its confirmation reaches the orchestrator.
+
+   4.  The orchestrator reconnects and resumes the dialog with the hotel
+       agent (B1-6).  The hotel agent verifies that the orchestrator is
+       the participant whose exchange was interrupted, and that the
+       dialog is current and still authorized (B1-7).
+
+   5.  Instead of sending the booking request again, which could book a
+       second room, the orchestrator asks the hotel agent for the
+       outcome of its request.  It learns that the room was booked and
+       uses that booking.
+
+4.2.4.  Protocol Requirements
 
      +========+=========================================+===========+
      | REQ-ID | Description                             | Tag       |
@@ -636,7 +713,37 @@ Table of Contents
    |                     |<--Result Reporting-----|            |
    +---------------------+                        +------------+
 
-4.3.3.  Additional Protocol Requirements
+4.3.3.  Example
+
+   A user asks a banking assistant, the orchestrator, to close an
+   account.  The orchestrator delegates the closure to an account
+   closure agent, which runs a workflow that can take several days.
+
+   +------------+      +--------------+      +---------------+
+   |    User    |<---->|   Banking    |<---->| Account       |
+   |            |      |  assistant   |      | closure agent |
+   +------------+      +--------------+      +---------------+
+
+   1.  The orchestrator establishes a dialog with the closure agent and
+       delegates the closure.  The dialog lasts for the whole workflow.
+
+   2.  The closure agent cancels the account's standing payments and
+       closes the linked debit card.  After each step it sends the
+       orchestrator a progress notification, such as "standing payments
+       cancelled" (B2-1).
+
+   3.  Before transferring the remaining balance, the closure agent
+       pauses and sends an authorization checkpoint request stating the
+       amount and the destination account (B2-2, B2-6).
+
+   4.  The orchestrator relays the request to the user, who approves it
+       (B2-3).  The approval covers only this transfer (B2-5).
+
+   5.  The closure agent completes the transfer and reports the result.
+       If no response had arrived before the timeout, it would have
+       halted the transfer and treated the request as unresolved (B2-4).
+
+4.3.4.  Additional Protocol Requirements
 
    This use case builds on the requirements defined for Section 4.2 and
    introduces additional requirements specific to authorization
@@ -709,7 +816,7 @@ Table of Contents
    to other agents, and authorization scope is required to be
    progressively constrained at each hop.
 
-   This use case is described in [A2A] and [ROSENBERG].
+   This use case is described in [A2A].
 
 4.4.2.  Interaction Flow
 
@@ -727,7 +834,47 @@ Table of Contents
     |Agent-4 |  | Tools  |
     +--------+  +--------+
 
-4.4.3.  Additional Protocol Requirements
+4.4.3.  Example
+
+   A hiring manager asks a company's hiring agent to find candidates for
+   a job listing.  The hiring agent delegates sourcing to a recruitment
+   agency's sourcing agent.  The sourcing agent searches a job board
+   tool and delegates screening of the results to a screening agent,
+   which assesses each candidate against the listing.  The hiring agent
+   later delegates interviews to a scheduling agent.  Each agent is run
+   by a different provider, in its own administrative domain.
+
+   +--------+    +----------+    +-----------+
+   | Hiring |--->| Sourcing |--->| Screening |
+   | agent  |    |  agent   |    |   agent   |
+   +--------+    +----------+    +-----------+
+       |              |
+       v              v
+   +------------+  +-----------+
+   | Scheduling |  | Job board |
+   |   agent    |  |   tool    |
+   +------------+  +-----------+
+
+   1.  The hiring agent establishes a dialog with the sourcing agent and
+       delegates the search, with an authorization limited to this job
+       listing (B3-1).
+
+   2.  The sourcing agent searches the job board tool, then delegates
+       screening to the screening agent.  Because the screening agent is
+       in another domain, the sourcing agent creates a new dialog linked
+       to the one it received (B3-9).  It passes an authorization
+       narrowed to reading the candidate profiles for this listing
+       (B3-1, B3-8).  The screening agent can determine that the hiring
+       manager originally authorized the task (B3-2).
+
+   3.  If the screening agent becomes unavailable, the sourcing agent
+       detects this and halts that subtask (B3-5).
+
+   4.  The hiring manager picks candidates, and the hiring agent
+       delegates interview scheduling to the scheduling agent, in a new
+       dialog linked to the first.
+
+4.4.4.  Additional Protocol Requirements
 
    This use case builds on the requirements defined for Section 4.2 and
    introduces additional requirements specific to multi-hop delegation
@@ -810,7 +957,11 @@ Table of Contents
     |        | propagate the dialog context across |                 |
     |        | each hop of a delegation chain, so  |                 |
     |        | that participants can correlate     |                 |
-    |        | interactions along the chain.       |                 |
+    |        | interactions along the chain.  A    |                 |
+    |        | participant may instead create a    |                 |
+    |        | new dialog, with a new dialog       |                 |
+    |        | context, linked to the one it       |                 |
+    |        | received.                           |                 |
     +--------+-------------------------------------+-----------------+
 
                                  Table 5
@@ -861,7 +1012,38 @@ Table of Contents
                   ^                           ^
                   |___________________________|
 
-4.5.3.  Additional Protocol Requirements
+4.5.3.  Example
+
+   A research team uses a multi-agent research assistant [COSCIENTIST]
+   to propose hypotheses for a research goal.  A supervisor agent,
+   acting as the coordinator, distributes the goal to generation agents
+   that propose hypotheses, a reflection agent that reviews them, and a
+   ranking agent that ranks them.
+
+                    +------------------+
+                    | Supervisor agent |
+                    +------------------+
+                     /       |        \
+                    v        v         v
+           +------------+ +------------+ +---------+
+           | Generation | | Reflection | | Ranking |
+           |   agents   | |   agent    | |  agent  |
+           +------------+ +------------+ +---------+
+
+   1.  The supervisor establishes a dialog with the agents and
+       distributes the research goal to them (B4-1).
+
+   2.  The generation agents propose hypotheses independently.
+
+   3.  The reflection agent reviews each hypothesis, and the ranking
+       agent ranks them.  The supervisor shares the results with all
+       agents for the next round (B4-1).
+
+   4.  After several rounds, the supervisor returns the top-ranked
+       hypotheses to the research team and terminates the dialog (CMN-
+       11).
+
+4.5.4.  Additional Protocol Requirements
 
    This use case builds on the requirements defined for Section 4.2 and
    introduces additional requirements specific to group message
@@ -914,6 +1096,11 @@ Table of Contents
 
    Note that mediating can be a function within an orchestrator.
 
+   The mediator can be deployed as a proxy between an agent and its
+   tools, such as an MCP proxy.  The 3GPP 6G architecture study
+   [TR23801-01] describes it as an agent gateway through which third-
+   party agents use network agents.
+
    This pattern is reflected in the MCP server architecture defined in
    [MCP] and the agent routing patterns discussed in [A2A].
 
@@ -933,7 +1120,31 @@ Table of Contents
    | Agent-1 | | Tool   |  | Agent-2 |
    +--------+ +---------+  +--------+
 
-4.6.3.  Additional Protocol Requirements
+4.6.3.  Example
+
+   A mobile network operator runs an agent gateway through which
+   authorized third-party agents use network agents.  A concert
+   organizer's agent asks for extra network capacity at the venue during
+   the concert.
+
+   +-------------+      +----------+      +--------------------+
+   | Organizer's |----->|  Agent   |----->| Network agent      |
+   | agent       |      | gateway  |      |                    |
+   +-------------+      +----------+      +--------------------+
+
+   1.  The organizer's agent establishes a dialog with the gateway and
+       requests extra capacity at the venue for the hours of the
+       concert.
+
+   2.  The gateway checks that the request matches the organizer's
+       authorization and forwards it to the network agent.
+
+   3.  The gateway confirms the added capacity to the organizer's agent.
+
+   4.  After the concert, the organizer's agent terminates the dialog
+       (CMN-11).
+
+4.6.4.  Additional Protocol Requirements
 
    +========+============================================+============+
    | REQ-ID | Description                                | Tag        |
@@ -969,7 +1180,21 @@ Table of Contents
    B1-7, B1-8, B2-2 to B2-6, B3-1 to B3-4, B3-6, B3-7, B3-8).  These are
    expected to be addressed in the OAuth and WIMSE Working Groups.
 
-6.  Accountability and Auditing
+6.  Existing Protocols and Gaps
+
+   [A2A] groups related tasks under a context identifier, and [MCP]
+   groups the requests between one client and one server under a
+   session.  Both are scoped to a single hop.  An agent that delegates
+   to another agent or calls a tool starts a new context or session, and
+   no identifier spans the hops.  Cancellation is per task and per hop.
+
+   The gap is a dialog that spans hops, protocols, and connections, with
+   a lifecycle that each participant can verify: the dialog requirements
+   in this document (CMN-11, CMN-12, B1-6 to B1-8, B3-9, B5-2, B5-3).
+
+   This analysis reflects [A2A] and [MCP] at the time of writing.
+
+7.  Accountability and Auditing
 
    Accountability and auditing of agent actions are out of scope for
    this document.  Audit and provenance representation is addressed by
@@ -979,7 +1204,7 @@ Table of Contents
 
    Editor's note: Add a reference to IETF audit work once it progresses.
 
-7.  Security Considerations
+8.  Security Considerations
 
    Security considerations are addressed throughout this document via
    the Identity, Authentication, and Delegation requirements defined for
@@ -1003,7 +1228,7 @@ Table of Contents
    of action to address the error.  They need to be precise enough for
    that, but not reveal information that an attacker could use.
 
-8.  IANA Considerations
+9.  IANA Considerations
 
    This document has no IANA actions.
 
@@ -1016,6 +1241,10 @@ Acknowledgements
    Templeman, Bradley B, and Douglas Wadkins for the discussions and
    comments.
 
+   The examples in Section 4.1 and Section 4.3 are based on scenarios in
+   draft-rosenberg-agentproto-usecases by Jonathan Rosenberg and Cullen
+   Jennings.
+
 Informative References
 
    [A2A]      "Agent2Agent Protocol Specification", n.d.,
@@ -1023,6 +1252,10 @@ Informative References
 
    [AUTOGEN]  "AutoGen: A Framework for Multi-Agent Conversation", n.d.,
               <https://microsoft.github.io/autogen/stable/>.
+
+   [COSCIENTIST]
+              Google DeepMind, "Accelerating scientific discovery with
+              Co-Scientist", n.d., <https://arxiv.org/abs/2502.18864>.
 
    [LANGCHAIN]
               "LangChain Agent Framework", n.d.,
@@ -1040,11 +1273,6 @@ Informative References
               Selecting Mandatory-to-Implement Algorithms", n.d.,
               <https://www.rfc-editor.org/rfc/rfc7696>.
 
-   [ROSENBERG]
-              "Framework, Use Cases and Requirements for AI Agent
-              Protocols", n.d., <https://datatracker.ietf.org/doc/draft-
-              rosenberg-agentproto-usecases>.
-
    [SCRM]     "Agentic AI Use Cases", n.d.,
               <https://datatracker.ietf.org/doc/draft-scrm-aiproto-
               usecases>.
@@ -1053,6 +1281,11 @@ Informative References
               agent Secured Collaboration", n.d.,
               <https://datatracker.ietf.org/doc/draft-song-dmsc-problem-
               statement>.
+
+   [TR23801-01]
+              3GPP, "Study on Architecture for 6G System", 3GPP TR
+              23.801-01 v0.9.0, n.d., <https://www.3gpp.org/ftp/Specs/
+              archive/23_series/23.801-01/>.
 
    [YAO]      "Problem Space Analysis of AI Agent Protocols in IETF",
               n.d., <https://datatracker.ietf.org/doc/draft-yao-
