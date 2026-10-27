@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-10-18T02:38:50.570775+00:00",
+  "timestamp": "2026-10-27T03:20:58.560872+00:00",
   "repo": "tireddy2/agentic-ai-ucreq2",
   "labels": [
     {
@@ -4267,6 +4267,32 @@
       "mergeCommit": {
         "oid": "4f66bf7091b425cfb9b523c429687232029138a7"
       },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 75,
+      "id": "PR_kwDOSIVa8M8AAAABKjAGLQ",
+      "title": "Address comments from the WG",
+      "url": "https://github.com/tireddy2/agentic-ai-ucreq2/pull/75",
+      "state": "OPEN",
+      "author": "tireddy2",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-10-25T07:29:18Z",
+      "updatedAt": "2026-10-25T07:29:18Z",
+      "baseRepository": "tireddy2/agentic-ai-ucreq2",
+      "baseRefName": "main",
+      "baseRefOid": "4f66bf7091b425cfb9b523c429687232029138a7",
+      "headRepository": "tireddy2/agentic-ai-ucreq2",
+      "headRefName": "tireddy2-patch-16",
+      "headRefOid": "b66f5f31527e0445c45c8e77f7406c6c7112cb25",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
       "reviews": []
     }
