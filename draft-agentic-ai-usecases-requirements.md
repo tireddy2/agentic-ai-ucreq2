@@ -361,6 +361,52 @@ interface each applies to.
 | A1-9 | A delegation mechanism is required to be defined by which an agent presents to a tool provider a credential attesting the authorization for the requested tool access, without exposing the client's primary credentials. | Agent-to-Tool | Authentication |
 | A1-10 | The protocol is required to preserve the dialog context when a participant transforms data from one modality to another, such as audio to text. | App/Agent-to-Agent | Dialog |
 
+## Direct User-to-Agent Dialog and Human Handoff {#user-dialog}
+
+### Description
+
+A user establishes a dialog directly with an agent: the user is a
+dialog participant, not merely the principal on whose behalf an agent
+acts. During the dialog, either the user or the agent may determine
+that the task requires a human — for example, the agent cannot
+complete the task within its authorization, the task is subject to a
+policy that requires human involvement, or the user explicitly
+requests a human. The dialog is then handed off: a human joins the
+existing dialog or a new, linked dialog is created per B3-9, and the
+dialog context established so far is available to the human. When the
+human withdraws, the dialog may continue between the user and the
+agent, or terminate.
+
+The design of the user interface is out of scope. This use case is concerned
+only with the protocol-visible events: participant changes, the
+identity and authorization of each participant, and the availability
+of dialog context to a newly joined participant.
+
+### Example
+
+   Alice opens her bank's support channel. Her dialog is with the
+   bank's support agent (Alice, Bank Agent). Alice asks to dispute a
+   transaction. The agent's policy requires a specialist and Alice
+   consents. The agent adds a human specialist, Bob, as a
+   participant. Bob is authenticated as representing the bank
+   (OAuth-authorized credential), and Alice's dialog shows that a
+   handoff occurred and that Bob acts for the bank. Bob sees the
+   dialog context (the transaction reference, the agent's progress
+   notifications). Bob resolves the dispute and withdraws. The
+   dialog continues between Alice and the agent, which confirms
+   resolution and closes the dialog with Alice (CMN-11).
+
+### Additional Protocol Requirements {#user-dialog-requirements}
+
+| REQ-ID | Description | Tag |
+|--------|-------------|-----|
+| A2-1 | The protocol MUST allow a human user to be a dialog participant. The authentication method and its strength used to authenticate the user MUST be visible to the other participants of the dialog. | USER-IN-DIALOG |
+| A2-2 | The protocol MUST allow a participant to be added to an existing dialog, or a new linked dialog to be created per B3-9, such that the added participant has access to the dialog context. | LIFECYCLE |
+| A2-3 | When a handoff occurs, the remaining participants MUST be able to determine that a handoff occurred and the identity of the new participant, including the organization on whose behalf the new participant acts. | ACCOUNTABILITY |
+| A2-4 | A human joining a dialog MUST be able to prove authorization to act for the deploying organization (e.g., OAuth-anchored identity), independent of the dialog's history. | AUTHENTICATION |
+| A2-5 | The protocol MUST allow a user to resume the dialog from a different device than the one on which the dialog was established, with resumption verified per B1-6. | RESUMPTION |
+| A2-6 | A user participant MUST be able to terminate any dialog in which he/she participate. Termination is subject to CMN-11. | LIFECYCLE |
+
 ## Orchestrator and Agent Collaboration {#orchestrator-agent}
 
 ### Description
