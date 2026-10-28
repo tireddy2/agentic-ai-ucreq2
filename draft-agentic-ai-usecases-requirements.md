@@ -215,6 +215,52 @@ correlate the requests it receives with the requests it forwards.
 Neither function requires access to the task context. Each participant
 can use the dialog identifier to retrieve its own task context.
 
+# Deployment Models {#deployment-models}
+
+This section describes the deployment models in which the agents of {{usecases}} can be realized. A single dialog may begin and end within one deployment model or span several ones. None of the requirements in this document assume a particular model.
+
+## Agent Deployment Models {#deployment-models-models}
+
+**User-terminal deployment**: The agent executes on a device controlled by the user (laptop, a smartphone, vehicle, or any other endpoint). The user may participate directly in dialogs with this agent. Connections from a user-terminal agent are subject to intermittent connectivity, address reassignment after roaming between access networks, and power constraints on long-lived connections.
+
+**Organization-hosted deployment**: The agent executes within an organization's infrastructure and acts on behalf of that organization or its members. Authorization of the agent is typically anchored in credentials issued by the organization. Dialogs established by organization-hosted agents frequently cross administrative domains.
+
+**Third-party service deployment**: The agent executes on infrastructure operated by a third party and is authorized to act on behalf of a user or an organization through delegated authorization, commonly OAuth-based delegation as described in {{relationship-oauth-wimse}}
+
+**Network-operator deployment**: The agent executes in a network operator's domain, or agent functions of the network are reached through an operator-controlled agent gateway, as described for 6G networks in [TR23801]. Agents outside the operator network reach network agents and functions only through the gateway, as described in {{tool-mediation}}.
+
+The models above are not exclusive. For example, a user-terminal agent may delegate to a third-party service, which in turn invokes a tool through an operator gateway. Every hop of that chain may be in a different model.
+
+## Mediation Topologies {#mediation-topologies}
+
+Independent of where agents are deployed, dialogs between them are realized in one of the following topologies:
+
+- **Direct**: The dialog participants connect to each other without an intermediary.
+- **Proxy**: An intermediary forwards dialog messages without terminating the dialog. The dialog endpoints may or may not be aware of the proxy.
+- **Gateway (mediator)**: An intermediary terminates the dialog on one side and establishes a new, linked dialog on the other side, as permitted by B3-9. The intermediary authenticates separately to each side.
+- **Chained**: More than one intermediary or delegated agent participates between the original initiator and the final executor.
+
+{{tool-mediation}} describes the mediator use case. The topologies above apply to dialogs in every deployment model.
+
+## Deployment-Model Requirements {#deployment-model-requirements}
+
+The requirements in this section apply in addition to the common requirements listed into {{common-requirements}}.
+
+| REQ-ID | Description | Tag |
+|--------|-------------|-----|
+| CMN-13 | The protocol MUST NOT assume a particular deployment model. Dialog establishment, modification, termination, and revocation MUST be possible between participants in different deployment models, including across administrative domains. | DEPLOYMENT-MODEL |
+| CMN-14 | The privacy risk analysis of the protocol deliverable MUST cover persistent dialog identifiers in each deployment model of {{deployment-models-models}}, and MUST identify which parties can correlate dialogs through them (e.g., an operator gateway that observes all dialogs crossing it, or a third-party service that hosts many dialogs of one user). | PRIVACY |
+
+## Transport Implications {#deployment-implications}
+
+The deployment model constrains which transport bindings are practical. This section is purely informational and can be used in future stage when developing binding evaluation criteria to select the bindings to specify.
+
+Dialogs involving user-terminal agents operate across access networks with changing addresses and NAT rebinding. Bindings and keepalive behavior MUST tolerate such changes without tearing down the dialog (see CMN-7, CMN-8).
+
+Dialogs crossing an operator gateway traverse a fixed administrative point. Binding selection MUST NOT preclude policy enforcement or lawful interception obligations at such a point, without endorsing any particular interception design.
+
+The interactive use case of {{realtime}} requires bindings that can multiplex dialog control with interactive media over a single connection (e.g., bindings over QUIC, HTTP, WebRTC, or MoQ).
+
 # Common Protocol Requirements {#common-requirements}
 
 The following baseline requirements apply to both agent-to-agent and agent-to-tool protocol interactions across all use cases and are not repeated per use case.
@@ -280,8 +326,7 @@ the client application and agent are required to be able to negotiate which
 modalities are active for the dialog.
 
 This use case covers the protocol interface between the client
-application and the agent. The interaction between the user and
-the client application is out of scope. This use case assumes that
+application and the agent. This use case assumes that
 the user communicates with the agent via a client application;
 direct communication between a user and an agent without an
 intermediary client application is not covered in this use case.
