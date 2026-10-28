@@ -811,6 +811,42 @@ capacity at the venue during the concert.
 | B5-2  | The protocol is required to support continuation of a dialog through a different mediator when the mediator in use fails. | Dialog |
 | B5-3  | The protocol is required to enable a mediator that translates between agent communication protocols to carry the dialog context across the translation, so that participants on each side can correlate the dialog. | Dialog |
 
+## Interactive Real-Time Agent Session {#realtime}
+
+### Description
+
+An agent participates in an interactive session with a user or with
+other agents where the value of the session depends on low end-to-end
+latency: for example, an agent providing live translation during a
+conversation, an in-vehicle assistant that must act within a bounded
+time, or a network agent that adjusts resources in response to live
+demand. Dialog control messages (establish, modify, progress, cancel)
+and interactive media or other latency-sensitive data coexist within
+the same dialog. Session duration may be hours while individual
+interactions are expected to complete in well under a second.
+
+### Example
+
+   During a live multilingual customer call, the operator network's
+   translation agent joins a dialog between two users
+   (User A, User B) and translates audio in near real time
+   (User A, translation Agent, User B). Mid-dialog, the agent is
+   re-instantiated after a failure. The dialog resumes without the
+   users re-establishing the session, and the dialog's latency class
+   informs the recovery interval. When User A ends the call, the
+   cancellation (CMN-11) reaches the translation agent promptly so
+   that transcription stops immediately.
+
+### Additional Protocol Requirements {#realtime-requirements}
+
+| REQ-ID | Description | Tag |
+|--------|-------------|-----|
+| B6-1 | The protocol MUST allow a dialog to be established without application-level handshakes beyond those needed for connection establishment and authentication, so that dialog setup does not add latency to session setup. | LATENCY |
+| B6-2 | The protocol MUST allow the dialog initiator to indicate a latency class for the dialog, so that participants and intermediaries can select recovery, keepalive, and failure-detection behavior appropriate to the class. | LATENCY |
+| B6-3 | For dialogs with an interactive latency class, failure detection and resumption (CMN-6 to CMN-8, B1-6) MUST be achievable without user-visible dialog re-establishment, and SHOULD be achievable within a time interval consistent with the indicated latency class. | RECOVERY |
+| B6-4 | Cancellation (CMN-11) propagation for interactive-latency dialogs SHOULD complete within a time interval consistent with the indicated latency class; pending interactive output (e.g., media) from cancelled tasks SHOULD be stopped promptly. | CANCELLATION |
+| B6-5 | The protocol MUST NOT preclude transport bindings that carry dialog control and interactive media in the same connection or correlated connections (e.g., bindings over QUIC, HTTP, WebTransport, WebRTC, or MoQ). The interactive use cases in this section are input to the binding evaluation of the protocol deliverable. | TRANSPORT |
+
 # Relationship to OAuth and WIMSE Work {#relationship-oauth-wimse}
 
 Several requirements in this document concern authorization, delegation, and agent identity (CMN-4, CMN-8, CMN-9, CMN-10, CMN-12, B1-7, B1-8, B2-2 to B2-6, B3-1 to B3-4, B3-6, B3-7, B3-8). These are expected to be addressed in the OAuth and WIMSE Working Groups.
