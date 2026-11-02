@@ -5,9 +5,9 @@
 Network Working Group                                           T. Reddy
 Internet-Draft                                                 Z. Sarker
 Intended status: Informational                                     Nokia
-Expires: 3 May 2027                                               K. Yao
+Expires: 6 May 2027                                               K. Yao
                                                             China Mobile
-                                                         30 October 2026
+                                                         2 November 2026
 
 
                  Agentic AI Use Cases and Requirements
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 3 May 2027.
+   This Internet-Draft will expire on 6 May 2027.
 
 Copyright Notice
 
@@ -970,7 +970,8 @@ Table of Contents
     |        | chain, and to report to the party   |                 |
     |        | that initiated it whether the       |                 |
     |        | cancellation or termination took    |                 |
-    |        | effect further down the chain.      |                 |
+    |        | effect further down the chain, or   |                 |
+    |        | that this could not be determined.  |                 |
     +--------+-------------------------------------+-----------------+
 
                                  Table 5
@@ -1189,10 +1190,11 @@ Table of Contents
    B2-6, B3-1 to B3-4, B3-6, B3-7, B3-8).  These are expected to be
    addressed in the OAuth and WIMSE Working Groups.
 
-   Rejecting a dialog change or a resumption when a check fails (CMN-12,
-   B1-7, B1-8) is a requirement for the dialog management protocol.  The
-   check itself, verifying identity and authorization, is expected to be
-   addressed in the OAuth and WIMSE Working Groups.
+   Rejecting a dialog change or a resumption when a check fails or
+   cannot be completed (CMN-12, B1-7, B1-8) is a requirement for the
+   dialog management protocol.  The check itself, verifying identity and
+   authorization, is expected to be addressed in the OAuth and WIMSE
+   Working Groups.
 
    Authorizing an individual action within a task, including when the
    authorization information is unavailable or may no longer be current,
