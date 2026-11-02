@@ -186,6 +186,9 @@ connections.
 correlate and maintain a dialog. It does not include the content exchanged
 with AI models, such as conversation memory, retrieved documents, or prompts.
 
+**Linked Dialog**: A new dialog, with a new dialog context, that a
+participant creates to continue a dialog it received.
+
 **Task Context**: The data that a participant maintains
 to execute a task, such as conversation history and intermediate
 results. Task context is not carried by the protocol.
@@ -214,6 +217,56 @@ and restarting the task. An intermediary uses the dialog identifier to
 correlate the requests it receives with the requests it forwards.
 Neither function requires access to the task context. Each participant
 can use the dialog identifier to retrieve its own task context.
+
+# Deployment Models {#deployment-models}
+
+This section describes the deployment models in which the agents of
+{{usecases}} can be realized. The models are not exclusive. None of the
+requirements in this document assume a particular model.
+
+## Agent Deployment Models {#agent-deployment-models}
+
+**User-terminal deployment**: The agent executes on a device controlled
+by the user (laptop, smartphone, vehicle, or any other endpoint) and
+initiates dialogs with other agents and tools on behalf of the user.
+Connections from a user-terminal agent are subject to intermittent
+connectivity, address reassignment after roaming between access
+networks, and power constraints on long-lived connections.
+
+**Organization-hosted deployment**: The agent executes within an
+organization's infrastructure and acts on behalf of that organization
+or its members. Authorization of the agent is typically anchored in
+credentials issued by the organization.
+
+**Third-party service deployment**: The agent executes on
+infrastructure operated by a third party and is authorized to act on
+behalf of a user or an organization through delegated authorization,
+commonly OAuth-based delegation as described in
+{{relationship-oauth-wimse}}.
+
+**Network-operator deployment**: The agent executes in a network
+operator's domain, or agent functions of the network are reached
+through an operator-controlled agent gateway, as described for 6G
+networks in [TR23801-01]. Agents outside the operator network reach
+network agents and functions only through the gateway, as described in
+{{tool-mediation}}.
+
+## Mediation Topologies {#mediation-topologies}
+
+Independent of where agents are deployed, dialogs between them are
+realized in one of the following topologies:
+
+- **Direct**: The dialog participants connect to each other without an
+  intermediary.
+- **Proxy**: An intermediary forwards dialog messages without
+  terminating the dialog. The dialog endpoints may or may not be aware
+  of the proxy.
+- **Gateway (mediator)**: An intermediary terminates the dialog on one
+  side and establishes a linked dialog on the other side (B3-9). The
+  intermediary authenticates separately to each side.
+
+{{tool-mediation}} describes the mediator use case. The topologies
+above apply to dialogs in every deployment model.
 
 # Common Protocol Requirements {#common-requirements}
 
@@ -253,17 +306,18 @@ determined by the transport bindings.
 
 # Use Cases {#usecases}
 
-These interactions differ from ordinary application-to-service invocation in
-several respects, one being runtime selection of agents and tools by capability.
-An agent's internal processing, including perception, planning and
-re-planning, and invocation of its AI model, is not visible on the protocol
-interface and is out of scope; it motivates the use cases but drives no
-protocol requirement. Cross-domain operation can apply to any of
-these use cases. Crossing an administrative boundary adds authentication and
-authorization requirements, which map to the OAuth and WIMSE work discussed in
-{{relationship-oauth-wimse}}, and privacy requirements on dialog context
-propagated across the boundary, discussed in {{security}}. The use
-cases are independent of deployment model: they apply whether participants are
+These interactions differ from ordinary application-to-service
+invocation in several respects, one being runtime selection of agents
+and tools by capability. An agent's internal processing, including
+perception, planning and re-planning, and invocation of its AI model, is
+not visible on the protocol interface and is out of scope; it motivates
+the use cases but drives no protocol requirement. Cross-domain operation
+can apply to any of these use cases. Crossing an administrative boundary
+adds authentication and authorization requirements, which map to the
+OAuth and WIMSE work discussed in {{relationship-oauth-wimse}}, and
+privacy requirements on dialog context propagated across the boundary,
+discussed in {{security}}. The use cases are independent of deployment
+model ({{deployment-models}}): they apply whether participants are
 within a single administrative domain or span several, and whether they
 interact directly or through intermediaries.
 
@@ -272,19 +326,20 @@ interact directly or through intermediaries.
 ### Description
 
 A user submits a task to an AI agent via a client application. The
-agent executes the task by invoking one or more tools and returns
-results to the user. The tools invoked by the agent may reside in
-the same or a different administrative domain. The agent protocol
-is required to support multiple input and output modalities, and
-the client application and agent are required to be able to negotiate which
-modalities are active for the dialog.
+client application initiates a dialog with the agent, which creates and
+maintains it. The agent executes the task by invoking one or more tools
+and returns results to the user. The tools invoked by the agent may
+reside in the same or a different administrative domain. The agent
+protocol is required to support multiple input and output modalities,
+and the client application and agent are required to be able to
+negotiate which modalities are active for the dialog.
 
 This use case covers the protocol interface between the client
-application and the agent. The interaction between the user and
-the client application is out of scope. This use case assumes that
-the user communicates with the agent via a client application;
-direct communication between a user and an agent without an
-intermediary client application is not covered in this use case.
+application and the agent. The interaction between the user and the
+client application is out of scope in this use case. This use case
+assumes that the user communicates with the agent via a client
+application; direct communication between a user and an agent without
+an intermediary client application is not covered in this use case.
 
 This interaction pattern is described in [SCRM].
 
@@ -353,13 +408,14 @@ interface each applies to.
 | A1-1  | The protocol is required to support incremental streaming of agent output, allowing partial results to be delivered to the client before the agent has completed processing. | App/Agent-to-Agent | Transport |
 | A1-2  | The protocol is required to define a task cancellation message that the client can issue at any point during task execution. | App/Agent-to-Agent | Transport |
 | A1-3  | The protocol is required to define structured error message types that distinguish at minimum: transport failure, tool invocation failure, and agent processing failure. | Both | Transport |
-| A1-4  | The protocol is required to support multiple modalities for both input and output. | App/Agent-to-Agent | Transport |
+| A1-4  | The protocol is required to support multiple modalities for both input and output, including real-time audio and video with low latency. | App/Agent-to-Agent | Transport |
 | A1-5  | The protocol is required to support modality negotiation at dialog establishment, allowing the client and agent to agree on which modalities are active for the dialog. | App/Agent-to-Agent | Dialog, Transport |
 | A1-6  | The protocol is required to support agent-initiated notifications to the client during task execution. | App/Agent-to-Agent | Transport |
 | A1-7  | The protocol is required to support concurrent invocation of multiple tools within a single agent task, where tools may be operated by distinct providers across different administrative domains, each with independent authentication and authorization requirements. | Agent-to-Tool | Transport, Security |
 | A1-8  | The protocol is required to support bulk transfer of large data between communicating parties, applicable to both agent-to-tool and agent-to-agent interactions. | Both | Transport |
 | A1-9 | A delegation mechanism is required to be defined by which an agent presents to a tool provider a credential attesting the authorization for the requested tool access, without exposing the client's primary credentials. | Agent-to-Tool | Authentication |
 | A1-10 | The protocol is required to preserve the dialog context when a participant transforms data from one modality to another, such as audio to text. | App/Agent-to-Agent | Dialog |
+| A1-11 | The protocol is required to allow the user to continue a dialog from a different client application, such as one on another device. | App/Agent-to-Agent | Dialog |
 
 ## Orchestrator and Agent Collaboration {#orchestrator-agent}
 
@@ -876,7 +932,7 @@ This document has no IANA actions.
 # Acknowledgements
 {:numbered="false"}
 
-Thanks to Borislava Gajic, Julien Maisonneuve, Parisa Foroughi, Laurent Ciavaglia, Nathalie Romo Moreno, Peter Leis, Linda Dunbar, Mikhail Sergeev, Iman Schrock, Sumit Ahuja, Sina Khatibi, Vaishnavi Gudur, Lars Kersten Kroehl, Girish Konda, Nikhil Donapati, Nicholas Templeman, Bradley B, and Douglas Wadkins for the discussions and comments.
+Thanks to Borislava Gajic, Julien Maisonneuve, Parisa Foroughi, Laurent Ciavaglia, Nathalie Romo Moreno, Peter Leis, Linda Dunbar, Mikhail Sergeev, Iman Schrock, Sumit Ahuja, Sina Khatibi, Vaishnavi Gudur, Lars Kersten Kroehl, Girish Konda, Nikhil Donapati, Nicholas Templeman, Bradley B, Douglas Wadkins, and Lionel Morand for the discussions and comments.
 
 The examples in {{simple-single-agent}} and {{authz-checkpoint}} are
 based on scenarios in draft-rosenberg-agentproto-usecases by Jonathan
