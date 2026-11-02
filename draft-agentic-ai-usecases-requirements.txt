@@ -5,9 +5,9 @@
 Network Working Group                                           T. Reddy
 Internet-Draft                                                 Z. Sarker
 Intended status: Informational                                     Nokia
-Expires: 30 April 2027                                            K. Yao
+Expires: 6 May 2027                                               K. Yao
                                                             China Mobile
-                                                         27 October 2026
+                                                         2 November 2026
 
 
                  Agentic AI Use Cases and Requirements
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 30 April 2027.
+   This Internet-Draft will expire on 6 May 2027.
 
 Copyright Notice
 
@@ -963,6 +963,16 @@ Table of Contents
     |        | context, linked to the one it       |                 |
     |        | received.                           |                 |
     +--------+-------------------------------------+-----------------+
+    | B3-10  | The protocol is required to         | Dialog          |
+    |        | propagate cancellation of a         |                 |
+    |        | delegated subtask, and termination  |                 |
+    |        | of a dialog, along the delegation   |                 |
+    |        | chain, and to report to the party   |                 |
+    |        | that initiated it whether the       |                 |
+    |        | cancellation or termination took    |                 |
+    |        | effect further down the chain, or   |                 |
+    |        | that this could not be determined.  |                 |
+    +--------+-------------------------------------+-----------------+
 
                                  Table 5
 
@@ -1176,9 +1186,19 @@ Table of Contents
 5.  Relationship to OAuth and WIMSE Work
 
    Several requirements in this document concern authorization,
-   delegation, and agent identity (CMN-4, CMN-8, CMN-9, CMN-10, CMN-12,
-   B1-7, B1-8, B2-2 to B2-6, B3-1 to B3-4, B3-6, B3-7, B3-8).  These are
-   expected to be addressed in the OAuth and WIMSE Working Groups.
+   delegation, and agent identity (CMN-4, CMN-8, CMN-9, CMN-10, B2-2 to
+   B2-6, B3-1 to B3-4, B3-6, B3-7, B3-8).  These are expected to be
+   addressed in the OAuth and WIMSE Working Groups.
+
+   Rejecting a dialog change or a resumption when a check fails or
+   cannot be completed (CMN-12, B1-7, B1-8) is a requirement for the
+   dialog management protocol.  The check itself, verifying identity and
+   authorization, is expected to be addressed in the OAuth and WIMSE
+   Working Groups.
+
+   Authorizing an individual action within a task, including when the
+   authorization information is unavailable or may no longer be current,
+   is also expected to be addressed in the OAuth Working Group.
 
 6.  Existing Protocols and Gaps
 
@@ -1188,9 +1208,12 @@ Table of Contents
    to another agent or calls a tool starts a new context or session, and
    no identifier spans the hops.  Cancellation is per task and per hop.
 
-   The gap is a dialog that spans hops, protocols, and connections, with
-   a lifecycle that each participant can verify: the dialog requirements
-   in this document (CMN-11, CMN-12, B1-6 to B1-8, B3-9, B5-2, B5-3).
+   The gap is end-to-end: correlating a task across hops, protocols, and
+   connections, and propagating lifecycle actions such as cancellation
+   along the delegation chain.  These are the dialog requirements in
+   this document (CMN-11, CMN-12, B1-6 to B1-8, B3-9, B3-10, B5-2,
+   B5-3).  They can be met by carrying the dialog context across hops or
+   by linked dialogs.
 
    This analysis reflects [A2A] and [MCP] at the time of writing.
 
