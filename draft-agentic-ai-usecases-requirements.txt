@@ -202,6 +202,9 @@ Table of Contents
    exchanged with AI models, such as conversation memory, retrieved
    documents, or prompts.
 
+   *Linked Dialog*: A new dialog, with a new dialog context, that a
+   participant creates to continue a dialog it received.
+
    *Task Context*: The data that a participant maintains to execute a
    task, such as conversation history and intermediate results.  Task
    context is not carried by the protocol.
@@ -359,26 +362,32 @@ Table of Contents
    across the boundary, discussed in Section 8.  The use cases are
    independent of deployment model: they apply whether participants are
    within a single administrative domain or span several, and whether
-   they interact directly or through intermediaries.
+   they interact directly or through intermediaries.  Together they
+   cover the deployment models in scope: a client application on a
+   user's device and an agent (Section 4.1), agents hosted by different
+   organizations or service providers (Section 4.4), and agents reached
+   through a mediator such as a network operator's agent gateway
+   (Section 4.6).
 
 4.1.  Simple Single-Agent Task
 
 4.1.1.  Description
 
    A user submits a task to an AI agent via a client application.  The
-   agent executes the task by invoking one or more tools and returns
-   results to the user.  The tools invoked by the agent may reside in
-   the same or a different administrative domain.  The agent protocol is
-   required to support multiple input and output modalities, and the
-   client application and agent are required to be able to negotiate
-   which modalities are active for the dialog.
+   client application initiates a dialog with the agent, which creates
+   and maintains it.  The agent executes the task by invoking one or
+   more tools and returns results to the user.  The tools invoked by the
+   agent may reside in the same or a different administrative domain.
+   The agent protocol is required to support multiple input and output
+   modalities, and the client application and agent are required to be
+   able to negotiate which modalities are active for the dialog.
 
    This use case covers the protocol interface between the client
    application and the agent.  The interaction between the user and the
-   client application is out of scope.  This use case assumes that the
-   user communicates with the agent via a client application; direct
-   communication between a user and an agent without an intermediary
-   client application is not covered in this use case.
+   client application is out of scope in this use case.  This use case
+   assumes that the user communicates with the agent via a client
+   application; direct communication between a user and an agent without
+   an intermediary client application is not covered in this use case.
 
    This interaction pattern is described in [SCRM].
 
@@ -476,7 +485,10 @@ Table of Contents
    |        | required to support   | Agent          |                |
    |        | multiple modalities   |                |                |
    |        | for both input and    |                |                |
-   |        | output.               |                |                |
+   |        | output, including     |                |                |
+   |        | real-time audio and   |                |                |
+   |        | video with low        |                |                |
+   |        | latency.              |                |                |
    +--------+-----------------------+----------------+----------------+
    | A1-5   | The protocol is       | App/Agent-to-  | Dialog,        |
    |        | required to support   | Agent          | Transport      |
@@ -543,6 +555,13 @@ Table of Contents
    |        | one modality to       |                |                |
    |        | another, such as      |                |                |
    |        | audio to text.        |                |                |
+   +--------+-----------------------+----------------+----------------+
+   | A1-11  | The protocol is       | App/Agent-to-  | Dialog         |
+   |        | required to allow the | Agent          |                |
+   |        | user to continue a    |                |                |
+   |        | dialog from the same  |                |                |
+   |        | client application on |                |                |
+   |        | another device.       |                |                |
    +--------+-----------------------+----------------+----------------+
 
                                  Table 2
@@ -1261,8 +1280,8 @@ Acknowledgements
    Laurent Ciavaglia, Nathalie Romo Moreno, Peter Leis, Linda Dunbar,
    Mikhail Sergeev, Iman Schrock, Sumit Ahuja, Sina Khatibi, Vaishnavi
    Gudur, Lars Kersten Kroehl, Girish Konda, Nikhil Donapati, Nicholas
-   Templeman, Bradley B, and Douglas Wadkins for the discussions and
-   comments.
+   Templeman, Bradley B, Douglas Wadkins, and Lionel Morand for the
+   discussions and comments.
 
    The examples in Section 4.1 and Section 4.3 are based on scenarios in
    draft-rosenberg-agentproto-usecases by Jonathan Rosenberg and Cullen
