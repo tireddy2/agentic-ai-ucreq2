@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-11-01T03:51:43.255521+00:00",
+  "timestamp": "2026-11-03T04:57:32.369263+00:00",
   "repo": "tireddy2/agentic-ai-ucreq2",
   "labels": [
     {
@@ -4440,20 +4440,103 @@
       "id": "PR_kwDOSIVa8M8AAAABLti53Q",
       "title": "Address comments from the WG",
       "url": "https://github.com/tireddy2/agentic-ai-ucreq2/pull/79",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tireddy2",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2026-10-30T07:21:31Z",
-      "updatedAt": "2026-10-30T08:17:24Z",
+      "updatedAt": "2026-11-02T11:17:22Z",
       "baseRepository": "tireddy2/agentic-ai-ucreq2",
       "baseRefName": "main",
       "baseRefOid": "118e3955dedfcf3a99bab65a8ef182934c6f966a",
       "headRepository": "tireddy2/agentic-ai-ucreq2",
       "headRefName": "tireddy2-patch-17",
-      "headRefOid": "f188e88316352a059d468ba71205209fb5d42c16",
+      "headRefOid": "f9e0470dcc0cad4ba63be045e33155dad5583ce6",
+      "closedAt": "2026-11-02T11:17:22Z",
+      "mergedAt": "2026-11-02T11:17:22Z",
+      "mergedBy": "tireddy2",
+      "mergeCommit": {
+        "oid": "03c3a95664a246ea57ac8713234457c059155c6f"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOSIVa8M8AAAABVYbLEA",
+          "commit": {
+            "abbreviatedOid": "f188e88"
+          },
+          "author": "girishkvs",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-11-01T19:32:40Z",
+          "updatedAt": "2026-11-01T21:45:57Z",
+          "comments": [
+            {
+              "originalPosition": 15,
+              "body": "Can we change this to add `when a check fails or cannot be completed`? CMN-12 and B1-8 also cover a check that cannot be completed and we should tell the two apart.",
+              "createdAt": "2026-11-01T19:32:41Z",
+              "updatedAt": "2026-11-01T21:45:57Z"
+            },
+            {
+              "originalPosition": 4,
+              "body": "We should add the answer for following case to B3-10, the same way B1-8 keeps a failed check apart from one that couldn't be completed.\n\nB3-10 doesn't address the case where If the job board agent becomes unavailable (B3-5) after the hiring agent cancels the search, the sourcing agent can't learn whether the cancellation took effect there. It can only report that the outcome unknown.\n",
+              "createdAt": "2026-11-01T19:38:11Z",
+              "updatedAt": "2026-11-01T21:45:57Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 80,
+      "id": "PR_kwDOSIVa8M8AAAABMTffQw",
+      "title": "PR to merge the changes proposed by Lionel",
+      "url": "https://github.com/tireddy2/agentic-ai-ucreq2/pull/80",
+      "state": "MERGED",
+      "author": "tireddy2",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-11-02T12:59:57Z",
+      "updatedAt": "2026-11-02T13:44:14Z",
+      "baseRepository": "tireddy2/agentic-ai-ucreq2",
+      "baseRefName": "main",
+      "baseRefOid": "03c3a95664a246ea57ac8713234457c059155c6f",
+      "headRepository": "tireddy2/agentic-ai-ucreq2",
+      "headRefName": "tireddy2-patch-19",
+      "headRefOid": "2085c6726660d0557c2497fb021b2d040d6f2fe3",
+      "closedAt": "2026-11-02T13:44:14Z",
+      "mergedAt": "2026-11-02T13:44:14Z",
+      "mergedBy": "tireddy2",
+      "mergeCommit": {
+        "oid": "ccb5b080e24a3add1b789d28fb567c26565588ef"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 81,
+      "id": "PR_kwDOSIVa8M8AAAABMUpdPQ",
+      "title": "Remove multi-party requirements",
+      "url": "https://github.com/tireddy2/agentic-ai-ucreq2/pull/81",
+      "state": "OPEN",
+      "author": "tireddy2",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-11-02T14:26:25Z",
+      "updatedAt": "2026-11-02T14:26:44Z",
+      "baseRepository": "tireddy2/agentic-ai-ucreq2",
+      "baseRefName": "main",
+      "baseRefOid": "ccb5b080e24a3add1b789d28fb567c26565588ef",
+      "headRepository": "tireddy2/agentic-ai-ucreq2",
+      "headRefName": "tireddy2-patch-20",
+      "headRefOid": "41326b579a137839b41c5fd0e66a1591830aabff",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
