@@ -16,23 +16,23 @@ context of agent-to-agent communication, agent-to-tool communication,
 with focus on dialog management, transport, multimodal communication,
 communication security, agent identity and authentication. 
     " name="description">
-<meta content="xml2rfc 3.34.1" name="generator">
+<meta content="xml2rfc 3.35.0" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-agentic-ai-usecases-requirements-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.34.1
-    Python 3.14.8
-    ConfigArgParse 1.8.0
+  xml2rfc 3.35.0
+    Python 3.14.10
+    ConfigArgParse 1.9.0
     google-i18n-address 3.1.1
     intervaltree 3.2.1
     Jinja2 3.1.6
     lxml 6.1.1
     natsort 8.4.0
-    platformdirs 4.13.4
+    platformdirs 4.14.3
     pycountry 24.6.1
     PyYAML 6.0.3
     requests 2.33.1
-    wcwidth 0.9.2
+    wcwidth 0.9.4
 -->
 <link href="draft-agentic-ai-usecases-requirements.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -1052,7 +1052,7 @@ svg {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Reddy, et al.</td>
-<td class="center">Expires 6 May 2027</td>
+<td class="center">Expires 8 May 2027</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1065,12 +1065,12 @@ svg {
 <dd class="internet-draft">draft-agentic-ai-usecases-requirements-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-11-02" class="published">2 November 2026</time>
+<time datetime="2026-11-04" class="published">4 November 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2027-05-06">6 May 2027</time></dd>
+<dd class="expires"><time datetime="2027-05-08">8 May 2027</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1125,7 +1125,7 @@ communication security, agent identity and authentication.<a href="#section-abst
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 6 May 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 8 May 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1256,9 +1256,6 @@ communication security, agent identity and authentication.<a href="#section-abst
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.5.2.3">
                     <p id="section-toc.1-1.4.2.5.2.3.1"><a href="#section-4.5.3" class="auto internal xref">4.5.3</a>.  <a href="#name-example-5" class="internal xref">Example</a></p>
 </li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.5.2.4">
-                    <p id="section-toc.1-1.4.2.5.2.4.1"><a href="#section-4.5.4" class="auto internal xref">4.5.4</a>.  <a href="#name-additional-protocol-requireme" class="internal xref">Additional Protocol Requirements</a></p>
-</li>
                 </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.6">
@@ -1274,7 +1271,7 @@ communication security, agent identity and authentication.<a href="#section-abst
                     <p id="section-toc.1-1.4.2.6.2.3.1"><a href="#section-4.6.3" class="auto internal xref">4.6.3</a>.  <a href="#name-example-6" class="internal xref">Example</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.6.2.4">
-                    <p id="section-toc.1-1.4.2.6.2.4.1"><a href="#section-4.6.4" class="auto internal xref">4.6.4</a>.  <a href="#name-additional-protocol-requiremen" class="internal xref">Additional Protocol Requirements</a></p>
+                    <p id="section-toc.1-1.4.2.6.2.4.1"><a href="#section-4.6.4" class="auto internal xref">4.6.4</a>.  <a href="#name-additional-protocol-requireme" class="internal xref">Additional Protocol Requirements</a></p>
 </li>
                 </ul>
 </li>
@@ -1504,7 +1501,7 @@ can use the dialog identifier to retrieve its own task context.<a href="#section
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">CMN-11</td>
-            <td class="text-left" rowspan="1" colspan="1">The protocol is required to support establishment, modification, and termination of a dialog, distinct from cancellation of a delegated subtask within the dialog. Modification includes changes to the participants, modalities, or lifetime of the dialog. The protocol is required to support a dialog lifetime, after which the dialog is terminated.</td>
+            <td class="text-left" rowspan="1" colspan="1">The protocol is required to support establishment, modification, and termination of a dialog, distinct from cancellation of a delegated subtask within the dialog. Modification includes changes to the modalities or lifetime of the dialog. The protocol is required to support a dialog lifetime, after which the dialog is terminated.</td>
             <td class="text-left" rowspan="1" colspan="1">Dialog</td>
           </tr>
           <tr>
@@ -2305,8 +2302,8 @@ ranking agent that ranks them.<a href="#section-4.5.3-1" class="pilcrow">¶</a><
 </div>
 <ol start="1" type="1" class="normal type-1" id="section-4.5.3-3">
 <li id="section-4.5.3-3.1">
-              <p id="section-4.5.3-3.1.1">The supervisor establishes a dialog with the agents and distributes
-the research goal to them (B4-1).<a href="#section-4.5.3-3.1.1" class="pilcrow">¶</a></p>
+              <p id="section-4.5.3-3.1.1">The supervisor establishes a separate dialog with each agent and
+sends it the research goal.<a href="#section-4.5.3-3.1.1" class="pilcrow">¶</a></p>
 </li>
             <li id="section-4.5.3-3.2">
               <p id="section-4.5.3-3.2.1">The generation agents propose hypotheses independently.<a href="#section-4.5.3-3.2.1" class="pilcrow">¶</a></p>
@@ -2314,7 +2311,7 @@ the research goal to them (B4-1).<a href="#section-4.5.3-3.1.1" class="pilcrow">
             <li id="section-4.5.3-3.3">
               <p id="section-4.5.3-3.3.1">The reflection agent reviews each hypothesis, and the ranking agent
 ranks them. The supervisor shares the results with all agents for
-the next round (B4-1).<a href="#section-4.5.3-3.3.1" class="pilcrow">¶</a></p>
+the next round.<a href="#section-4.5.3-3.3.1" class="pilcrow">¶</a></p>
 </li>
             <li id="section-4.5.3-3.4">
               <p id="section-4.5.3-3.4.1">After several rounds, the supervisor returns the top-ranked
@@ -2322,32 +2319,6 @@ hypotheses to the research team and terminates the dialog
 (CMN-11).<a href="#section-4.5.3-3.4.1" class="pilcrow">¶</a></p>
 </li>
           </ol>
-</section>
-</div>
-<div id="b4-protocol-requirements">
-<section id="section-4.5.4">
-          <h4 id="name-additional-protocol-requireme">
-<a href="#section-4.5.4" class="section-number selfRef">4.5.4. </a><a href="#name-additional-protocol-requireme" class="section-name selfRef">Additional Protocol Requirements</a>
-          </h4>
-<p id="section-4.5.4-1">This use case builds on the requirements defined for <a href="#orchestrator-agent" class="auto internal xref">Section 4.2</a>
-and introduces additional requirements specific to group message delivery.<a href="#section-4.5.4-1" class="pilcrow">¶</a></p>
-<table class="center" id="table-6">
-            <caption><a href="#table-6" class="selfRef">Table 6</a></caption>
-<thead>
-              <tr>
-                <th class="text-left" rowspan="1" colspan="1">REQ-ID</th>
-                <th class="text-left" rowspan="1" colspan="1">Description</th>
-                <th class="text-left" rowspan="1" colspan="1">Tag</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="text-left" rowspan="1" colspan="1">B4-1</td>
-                <td class="text-left" rowspan="1" colspan="1">The protocol is required to support one-to-one, one-to-many, and many-to-many message delivery among a defined group of agents. Group membership is required to be dynamic, allowing agents to join or leave the group during the course of an exchange.</td>
-                <td class="text-left" rowspan="1" colspan="1">Transport, Security</td>
-              </tr>
-            </tbody>
-          </table>
 </section>
 </div>
 </section>
@@ -2455,11 +2426,11 @@ authorization and forwards it to the network agent.<a href="#section-4.6.3-3.2.1
 </div>
 <div id="b5-protocol-requirements">
 <section id="section-4.6.4">
-          <h4 id="name-additional-protocol-requiremen">
-<a href="#section-4.6.4" class="section-number selfRef">4.6.4. </a><a href="#name-additional-protocol-requiremen" class="section-name selfRef">Additional Protocol Requirements</a>
+          <h4 id="name-additional-protocol-requireme">
+<a href="#section-4.6.4" class="section-number selfRef">4.6.4. </a><a href="#name-additional-protocol-requireme" class="section-name selfRef">Additional Protocol Requirements</a>
           </h4>
-<table class="center" id="table-7">
-            <caption><a href="#table-7" class="selfRef">Table 7</a></caption>
+<table class="center" id="table-6">
+            <caption><a href="#table-6" class="selfRef">Table 6</a></caption>
 <thead>
               <tr>
                 <th class="text-left" rowspan="1" colspan="1">REQ-ID</th>
