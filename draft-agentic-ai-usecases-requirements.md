@@ -83,6 +83,19 @@ informative:
     title: "OpenAI Agents SDK"
     target: https://openai.github.io/openai-agents-python/
 
+  LIVE-AGENT:
+    title: "Live Agent Use Case Extensions for Agentic Dialogs"
+    target: https://www.ietf.org/archive/id/draft-agentproto-live-agent-use-case-00.html
+    author:
+      - ins: Y. Liu
+        name: Yanmei Liu
+      - ins: D. Liu
+        name: Dapeng Liu
+    date: 2026-10-29
+    seriesinfo:
+      Internet-Draft: draft-agentproto-live-agent-use-case-00
+    refcontent: Work in Progress
+
 --- abstract
 
 This document describes use cases for agentic AI communication systems
@@ -297,6 +310,11 @@ intermediary client application is not covered in this use case.
 
 This interaction pattern is described in [SCRM].
 
+The same pattern also applies to an ongoing live task, in which input
+observations continue while responses and tool operations are in
+progress. Sources, responses, and operations can change independently
+within the continuing dialog ({{live-interaction}}).
+
 ### Interaction Flow
 
 ~~~
@@ -311,7 +329,9 @@ This interaction pattern is described in [SCRM].
                                           +---------+
 ~~~
 
-### Example
+### Examples
+
+#### Travel Booking
 
 A user books a flight through a travel booking app. The app is the
 client application. It sends the user's request to a travel agent run
@@ -348,6 +368,69 @@ If the user abandons a search before step 3, the app cancels that task
 (A1-2). The dialog continues, and the user can start a new search in
 it without starting over.
 
+#### Live Interaction with Changing Sources and Devices {#live-interaction}
+
+A user asks an agent to explain an object shown by a camera through a
+client application. The client sends observations while the agent returns
+speech, text, or visual annotations, and tools may continue working
+while the user provides further instructions. Observation sources,
+responses, and delegated operations can change independently within
+the continuing dialog. The client, agent, and relevant speech or media
+intermediaries can be independently implemented.
+
+This extension retains the client application, agent, tool, and
+mediator roles of this use case. It concerns one user's interaction
+with an agent through a client, including the agent's tool access.
+A device or sensor does not by itself introduce a new participant.
+The scenarios are developed in [LIVE-AGENT].
+
+1. The client establishes dialog D and agrees on active modalities.
+   The application associates its sources and outputs with D.
+
+2. The agent begins response R1 associated with observation O1 while
+   further input continues to arrive.
+
+3. The user interrupts R1 and points the camera at another object.
+   The client stops local presentation and requests the intended
+   remote effect on R1. Other work in D can continue.
+
+4. The camera stops providing observations while audio continues.
+   The application distinguishes a change in source availability from
+   a modification of the dialog's agreed modalities.
+
+5. Output for R1 or O1 arrives after the change. Its association and
+   application validity remain distinguishable from current output.
+   This can occur even if R1's generation has already completed.
+
+6. If communication is interrupted, dialog resumption and application
+   state reconciliation are handled separately. Unknown source or
+   operation state remains explicit until it can be established.
+
+**Device and operation variants.**
+
+In a glasses-and-phone deployment, the phone can host the client and
+represent the glasses' sources and outputs. Removing the glasses or
+stopping their camera need not disconnect the phone. The same user can
+continue on the phone, changing the active source and authorized output
+recipient. Delayed data or reconnection of the glasses does not by
+itself restore their former role or permissions. If devices host
+separate clients, the application distinguishes an authorized
+participant change from a source change within one client. A change
+of source or output represented by the phone client is distinct from
+the client itself continuing on another device under A1-11.
+Battery or connectivity constraints can reduce source availability
+without requiring detailed device telemetry on the protocol interface.
+
+In an embodied deployment, the agent converses with the user while a
+controller performs an authorized operation exposed through a tool or
+mediator ({{tool-mediation}}). Stopping an explanation does not establish
+that the operation stopped. A request to change the operation has its
+own authorization and outcome. If connectivity fails before that
+outcome arrives, recovery combines the uncertain-operation handling in
+{{orchestrator-agent}} with current source and observation state.
+Physical control, local safety, and emergency-stop mechanisms remain
+with the device and domain specifications.
+
 ### Protocol Requirements {#a1-protocol-requirements}
 
 This use case involves two distinct protocol interfaces. The App/Agent-to-Agent
@@ -370,6 +453,55 @@ interface each applies to.
 | A1-9 | A delegation mechanism is required to be defined by which an agent presents to a tool provider a credential attesting the authorization for the requested tool access, without exposing the client's primary credentials. | Agent-to-Tool | Authentication |
 | A1-10 | The protocol is required to preserve the dialog context when a participant transforms data from one modality to another, such as audio to text. | App/Agent-to-Agent | Dialog |
 | A1-11 | The protocol is required to allow the user to continue a dialog from the same client application on another device. | App/Agent-to-Agent | Dialog |
+
+#### Live Interaction Refinements {#live-requirements}
+
+A1-1, A1-4, and A1-5 provide the streaming and modality basis. CMN-11
+and CMN-12 provide dialog lifecycle and authorized modification;
+A1-11 covers continuation by the same client application on another
+device. A1-2, B1-5, and B3-10 provide task cancellation and its
+propagation. B1-6 through B1-8 provide dialog resumption and its checks;
+{{orchestrator-agent}} describes the handling of uncertain operation
+outcomes. These capabilities are inherited rather than repeated as new
+requirements for real-time media.
+
+The refinements below concern the application protocol or profile used
+for live interaction. A binding and its application integration
+associate dialog context with application signaling and data flows,
+using the existing correlation requirements, including A1-10, B3-9,
+and B5-3 where applicable. The Responsibility column identifies which
+layer supplies the required semantics. Source, response, observation,
+and model state remain outside the common dialog context. Existing
+protocol mechanisms are to be reused where they provide the required
+semantics; changes to those protocols remain with their respective
+maintainers.
+
+| REQ-ID | Description | Responsibility | Tag |
+|--------|-------------|----------------|-----|
+| LIVE-1 | Where delayed data could be confused with current input or output, the application protocol or profile is required to distinguish the applicable source instance or exchange and associate relevant output with the observations or observation range to which it refers. The necessary associations are required to remain determinable through relevant transformations, source replacements, and restarts. | Application/profile; binding for dialog association | Dialog, Transport |
+| LIVE-2 | For supported response controls, the application protocol or profile is required to identify the target and intended effect, distinguishing control of response generation or output delivery from task cancellation and dialog termination. It is required to distinguish acceptance from effect, expose failed or unresolved outcomes, and define the treatment of completion races and late or superseded output. | Application/profile; existing task cancellation where applicable | Transport |
+| LIVE-3 | The application protocol or profile is required to distinguish source capability, current availability, and permission, and make unavailable or unknown observation state explicit. Signaled changes are required to have a determinable scope, outcome, and applicability to subsequent exchanges, including fallback or failure when no acceptable mode remains. The profile is required to define when last-known observations cease to be treated as current and how repeated or delayed updates are handled. Missing media alone does not establish the cause of unavailability. Continued dialog or connection activity does not by itself make an earlier observation current. A capture pause need not modify the dialog's agreed modalities. | Application/profile; existing dialog modification and authorization where applicable | Dialog, Transport, Security |
+| LIVE-4 | The application protocol or profile is required to distinguish connection state, participant changes, and changes among devices or sources represented by one client. It is required to establish the applicable input sources and authorized output recipients after a change; a continuing connection, delayed data, or device reconnection does not by itself reinstate an earlier role or permission. | Application/profile; existing dialog lifecycle and authorization | Dialog, Security |
+| LIVE-5 | After dialog resumption, the application protocol or profile is required to reconcile applicable sources, modalities, output recipients, response-control associations, and unfinished operations. Unresolved state and operation outcomes are required to remain explicit; uncertain operations are handled as described in {{orchestrator-agent}}. Resumption alone does not authorize an operation retry, source reactivation, or reuse of retired control associations or permissions. | Application/profile; existing dialog resumption and authorization | Dialog, Transport, Security |
+
+A response represented as a task uses the existing cancellation and
+outcome-reporting mechanisms. LIVE-2 specifies the scope and effects of
+response controls supported by the application; it does not require a
+separate task cancellation mechanism or prescribe local playback behavior.
+
+The profile defines its supported controls and the interpretation of
+time references and discontinuities. An input association can cover
+multiple observations; it does not prove which data an AI model
+actually used. Source identifiers need not be globally persistent.
+The application can retain mappings when a transformation changes
+identifiers, rather than requiring every hop to use the same value.
+
+Control and media can fail independently, so their applicable
+associations and application recovery rules need to remain defined
+when one path is unavailable. Reliable dialog-control delivery follows
+{{network-assumptions}}; it does not establish a global ordering of
+all media and signaling. Latency budgets, transport selection, and
+binding mechanisms remain subsequent protocol work.
 
 ## Orchestrator and Agent Collaboration {#orchestrator-agent}
 
@@ -869,6 +1001,32 @@ revocation, since it may be a transient failure rather than compromise.
 Signaled error reasons help a participant decide on the right course
 of action to address the error. They need to be precise enough for
 that, but not reveal information that an attacker could use.
+
+The confidentiality and integrity protection required by CMN-3 applies
+to the signaling and data flows used in {{live-interaction}}.
+Within that protected communication, applications need to use existing
+authorization mechanisms to determine which parties may consume input
+from a source, receive private output, or invoke a controller operation.
+The applicable authorization scope and duration, and the effect of
+revocation on active flows and operations, need to be defined. A dialog
+or source identifier does not by itself confer authorization.
+
+Forged associations can direct observations to the wrong dialog or
+recipient. Replayed controls or delayed updates can affect a current
+response or reinstate retired state. Application signaling and its
+associations need authentication, integrity, and replay handling
+appropriate to the trust boundaries, including intermediaries.
+Untrusted media or model output does not acquire the authority of
+authenticated control signaling merely by naming an operation.
+
+Conversational participation does not establish physical-action
+authority. Network delivery, an acknowledgment, local silence, or
+disconnection does not establish that an action completed or stopped.
+Its outcome is supplied by the relevant controller or domain protocol.
+Implementations also need appropriate limits on continuous input,
+generated output, retained recovery state, and repeated state changes
+to avoid unbounded resource use. These considerations do not define a
+new authorization protocol, audit format, or local safety mechanism.
 
 # IANA Considerations {#iana}
 
