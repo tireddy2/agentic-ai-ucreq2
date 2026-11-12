@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-11-10T05:39:35.348088+00:00",
+  "timestamp": "2026-11-12T05:25:04.279030+00:00",
   "repo": "tireddy2/agentic-ai-ucreq2",
   "labels": [
     {
@@ -4566,7 +4566,7 @@
       "labels": [],
       "body": "A client can continue a live dialog while its camera stops, an earlier response is interrupted, or an associated tool operation continues. A delayed annotation for an earlier view can still arrive after the user changes the camera's view. The example makes these situations explicit within the existing single-user client-to-agent model.\n\nThis change follows the organization of Section 4.1: a short addition to the description, a live example alongside travel booking, and a separate requirements table within Protocol Requirements. The glasses/phone and embodied-operation variants illustrate changes of sources and output recipients, and the distinction between conversational output and tool operations.\n\nThe example builds on the existing streaming, modality, cancellation, device-continuation, and dialog-resumption requirements. Five application/profile refinements address source and observation associations, response controls and their outcomes, source availability and observation validity, device/output-recipient changes, and application recovery. The requirements retain the necessary control and state semantics, including completion races, delayed updates, and reconciliation after resumption. A Responsibility column distinguishes these application requirements from common dialog lifecycle and correlation. Responses represented as tasks reuse the existing cancellation mechanisms, and uncertain operation outcomes follow Section 4.2.\n\nThe security additions apply the existing protection and authorization requirements to source data, private output, and controller operations, and describe association, replay, control-authority, and resource considerations.\n\nThe structure follows the original draft:\n\n- Section 4.1.1: a short live-task addition to the description.\n- Section 4.1.3.2: a live interaction example with device and operation variants.\n- Section 4.1.4.1: five application/profile refinements, with references to existing requirements and an explicit responsibility column.\n- Section 8: additional live-interaction security considerations.\n\nThe only new informative reference is the contributing Live Agent draft. Identifier encodings, message formats, latency budgets, transport selection, and binding mechanisms are left to subsequent protocol work.\n\nValidation: Markdown-to-RFCXML conversion and HTML/TXT rendering pass. The abstract and all 50 existing requirement rows are preserved. LIVE-1 through LIVE-5 have distinct identifiers and valid internal references.\n",
       "createdAt": "2026-11-09T10:50:55Z",
-      "updatedAt": "2026-11-09T10:50:57Z",
+      "updatedAt": "2026-11-11T10:28:57Z",
       "baseRepository": "tireddy2/agentic-ai-ucreq2",
       "baseRefName": "main",
       "baseRefOid": "fc0f63ed41200d4e47cc28f1505483a1384885a6",
@@ -4577,7 +4577,15 @@
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "tireddy2",
+          "authorAssociation": "OWNER",
+          "body": "Thanks @Yanmei-Liu for the PR and the mapping against -07.\r\n\r\nLIVE-1 to LIVE-5 are, as the PR states, requirements on the application protocol or profile. Their protocol-level aspects are mostly covered in the draft:\r\n\r\n- LIVE-1 (associating output with the input it refers to): the dialog context is preserved across modality transformation (A1-10) and protocol translation (B5-3). Linking output to a specific frame or time range within a task is defined by the application.\r\n- LIVE-2 (stopping a response in progress): the client cancels the task that produces the response (A1-2).\r\n- LIVE-3 (changes in available input, such as the camera being switched off): covered by CMN-11, which includes changes to the active modalities, and CMN-12, which verifies that such a change is authorized.\r\n- LIVE-4 (device versus participant changes): continuing a dialog from the same client application on another device is covered by A1-11, and a change to the dialog is verified as authorized before it is accepted (CMN-12). Devices attached to one client, such as glasses paired with a phone, are internal to the client application.\r\n- LIVE-5 (state after a dialog resumes): resumption and its checks are covered by B1-6 to B1-8.\r\n\r\nThe PR raises questions on task handling within a dialog: identifying the task in each message, reporting the outcome of a cancellation, and requesting the outcome of a task after an interruption. The answers depend on whether a dialog carries one task or several, which is a question for the WG. I plan to raise it at IETF 127 and update the draft based on the discussion.",
+          "createdAt": "2026-11-11T10:28:57Z",
+          "updatedAt": "2026-11-11T10:28:57Z"
+        }
+      ],
       "reviews": []
     }
   ]
